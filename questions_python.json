@@ -1,0 +1,211 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "difficulty": 1,
+      "question": "¿Cuál es el tipo de dato para texto en Python?",
+      "answers": ["str", "text", "char", "string"],
+      "correct": 0,
+      "explanation": "En Python el tipo para cadenas de texto es 'str'. Se puede crear con comillas simples, dobles o triples."
+    },
+    {
+      "id": 2,
+      "difficulty": 1,
+      "question": "¿Cómo se define una función en Python?",
+      "answers": ["def mi_funcion():", "function mi_funcion():", "fun mi_funcion():", "define mi_funcion():"],
+      "correct": 0,
+      "explanation": "Las funciones en Python se definen con la palabra clave 'def', seguida del nombre y paréntesis. El cuerpo va indentado."
+    },
+    {
+      "id": 3,
+      "difficulty": 1,
+      "question": "¿Qué estructura de datos usa llaves {} y pares clave-valor en Python?",
+      "answers": ["dict", "list", "tuple", "set"],
+      "correct": 0,
+      "explanation": "El diccionario (dict) usa {clave: valor}. Las listas usan [], las tuplas () y los sets también {} pero sin pares clave-valor."
+    },
+    {
+      "id": 4,
+      "difficulty": 1,
+      "question": "¿Qué devuelve len([1, 2, 3, 4]) en Python?",
+      "answers": ["4", "3", "5", "None"],
+      "correct": 0,
+      "explanation": "len() retorna el número de elementos. La lista tiene 4 elementos: 1, 2, 3 y 4."
+    },
+    {
+      "id": 5,
+      "difficulty": 1,
+      "question": "¿Cuál es la forma correcta de un comentario en Python?",
+      "answers": ["# comentario", "// comentario", "<!-- comentario -->", "** comentario"],
+      "correct": 0,
+      "explanation": "En Python los comentarios de una línea comienzan con #. Para varias líneas se usan triple comillas como docstrings."
+    },
+    {
+      "id": 6,
+      "difficulty": 1,
+      "question": "¿Qué keyword se usa para manejar excepciones en Python?",
+      "answers": ["try / except", "try / catch", "begin / rescue", "attempt / handle"],
+      "correct": 0,
+      "explanation": "Python usa 'try' para el bloque que puede lanzar error y 'except' para capturarlo. Opcionalmente 'finally' siempre se ejecuta."
+    },
+    {
+      "id": 7,
+      "difficulty": 2,
+      "question": "¿Qué es una list comprehension en Python?",
+      "answers": ["Una sintaxis compacta para crear listas: [expr for item in iterable if condición]", "Un método de la clase list para comprimir datos", "Una forma de heredar de la clase list", "Un decorador para funciones que retornan listas"],
+      "correct": 0,
+      "explanation": "[x**2 for x in range(10) if x % 2 == 0] crea una lista de cuadrados de números pares. Es más Pythónico y eficiente que un bucle equivalente."
+    },
+    {
+      "id": 8,
+      "difficulty": 2,
+      "question": "¿Qué diferencia hay entre una lista y una tupla en Python?",
+      "answers": ["Las listas son mutables; las tuplas son inmutables", "Las tuplas permiten más tipos de datos", "Las listas solo permiten números", "No hay diferencia práctica entre ambas"],
+      "correct": 0,
+      "explanation": "list puede modificarse (append, remove, etc.). tuple no puede modificarse una vez creada, lo que la hace más eficiente en memoria y hashable."
+    },
+    {
+      "id": 9,
+      "difficulty": 2,
+      "question": "¿Qué hace el operador * al desempaquetar en Python?",
+      "answers": ["Captura múltiples elementos sobrantes en una asignación: a, *b, c = [1,2,3,4,5]", "Repite el objeto n veces", "Importa todos los elementos de un módulo", "Multiplica listas elemento a elemento"],
+      "correct": 0,
+      "explanation": "a, *b, c = [1,2,3,4,5] → a=1, b=[2,3,4], c=5. El * captura todos los elementos que no tiene variable asignada explícitamente."
+    },
+    {
+      "id": 10,
+      "difficulty": 2,
+      "question": "¿Qué es un decorador en Python?",
+      "answers": ["Una función que envuelve a otra para modificar su comportamiento sin cambiar su código", "Una clase especial para crear objetos decorativos", "Un comentario estructurado para documentación", "Una función que retorna múltiples valores"],
+      "correct": 0,
+      "explanation": "@mi_decorador sobre una función es equivalente a func = mi_decorador(func). Se usa para logging, caché, autenticación, etc."
+    },
+    {
+      "id": 11,
+      "difficulty": 2,
+      "question": "¿Qué hace el método .items() en un diccionario Python?",
+      "answers": ["Retorna una vista de todos los pares (clave, valor) del diccionario", "Retorna solo los valores del diccionario", "Ordena el diccionario por sus claves", "Retorna el número de pares clave-valor"],
+      "correct": 0,
+      "explanation": "for clave, valor in mi_dict.items(): permite iterar sobre todos los pares clave-valor del diccionario."
+    },
+    {
+      "id": 12,
+      "difficulty": 2,
+      "question": "¿Qué es el operador walrus (:=) en Python 3.8+?",
+      "answers": ["Asigna y retorna un valor dentro de una expresión en la misma línea", "Es un alias del operador de comparación", "Crea una copia profunda del objeto", "Define una lambda de dos parámetros"],
+      "correct": 0,
+      "explanation": "while chunk := file.read(8192): permite asignar y evaluar en la misma expresión, evitando llamadas duplicadas."
+    },
+    {
+      "id": 13,
+      "difficulty": 3,
+      "question": "¿Qué es un generador (generator) en Python?",
+      "answers": ["Una función que usa 'yield' para producir valores de uno en uno sin cargar todo en memoria", "Una clase que genera instancias automáticamente", "Un tipo especial de lista que crece dinámicamente", "Un decorador para funciones que retornan múltiples valores"],
+      "correct": 0,
+      "explanation": "def mi_gen(): yield 1; yield 2. Los generadores son lazy: calculan el siguiente valor solo cuando se les pide con next(), ahorrando memoria."
+    },
+    {
+      "id": 14,
+      "difficulty": 3,
+      "question": "¿Cuál es la diferencia entre deepcopy y copy en Python?",
+      "answers": ["copy() copia el objeto pero comparte referencias anidadas; deepcopy() copia recursivamente todos los objetos anidados", "deepcopy es más lento pero menos seguro", "copy() solo funciona con listas", "Son equivalentes para objetos simples"],
+      "correct": 0,
+      "explanation": "copy.copy(obj) es una copia superficial: los objetos anidados siguen siendo los mismos. copy.deepcopy(obj) crea copias independientes de todo."
+    },
+    {
+      "id": 15,
+      "difficulty": 3,
+      "question": "¿Qué son los métodos dunder (magic methods) en Python?",
+      "answers": ["Métodos especiales con doble guión bajo (__init__, __str__, __len__) que definen comportamientos del lenguaje", "Métodos privados que no pueden heredarse", "Funciones del módulo builtins de Python", "Métodos que solo pueden llamarse desde la consola"],
+      "correct": 0,
+      "explanation": "__init__ es el constructor, __str__ define la representación en string, __len__ permite usar len(), __add__ define el operador +."
+    },
+    {
+      "id": 16,
+      "difficulty": 3,
+      "question": "¿Qué hace functools.lru_cache en Python?",
+      "answers": ["Memoriza los resultados de una función para evitar recalcularlos con los mismos argumentos", "Limita el número de llamadas a una función por segundo", "Crea una copia en caché de un módulo importado", "Ordena el resultado de la función en caché LRU"],
+      "correct": 0,
+      "explanation": "@lru_cache(maxsize=128) almacena hasta 128 resultados distintos. Ideal para funciones recursivas costosas como Fibonacci."
+    },
+    {
+      "id": 17,
+      "difficulty": 3,
+      "question": "¿Qué es el GIL (Global Interpreter Lock) en CPython?",
+      "answers": ["Un mutex que impide que múltiples hilos ejecuten bytecode Python simultáneamente, limitando el paralelismo real en CPU-bound tasks", "Un sistema de seguridad para imports de módulos externos", "Un garbage collector que bloquea la ejecución durante la recolección", "Una licencia global de Python"],
+      "correct": 0,
+      "explanation": "El GIL hace que threading no aproveche múltiples núcleos para tareas CPU-bound. Para paralelismo real en Python se usa multiprocessing o async IO."
+    },
+    {
+      "id": 18,
+      "difficulty": 4,
+      "question": "¿Qué es asyncio en Python?",
+      "answers": ["Una librería para escribir código concurrente usando async/await, ideal para tareas I/O-bound sin hilos reales", "Un módulo para ejecutar código en múltiples procesos", "Una interfaz para llamadas al sistema operativo de forma asíncrona", "Un framework web basado en eventos"],
+      "correct": 0,
+      "explanation": "asyncio usa un event loop con coroutines (async def / await) para manejar miles de conexiones I/O concurrentes con un solo hilo, sin el overhead de threads."
+    },
+    {
+      "id": 19,
+      "difficulty": 4,
+      "question": "¿Qué es un context manager y cómo se implementa?",
+      "answers": ["Un objeto que implementa __enter__ y __exit__ para gestionar recursos automáticamente con la sentencia 'with'", "Un gestor de contextos de ejecución para múltiples procesos", "Una clase que maneja las variables de entorno del sistema", "Un decorador para funciones que retornan contextos"],
+      "correct": 0,
+      "explanation": "with open('file') as f: usa el context manager del archivo que abre en __enter__ y cierra en __exit__, garantizando limpieza aunque ocurra una excepción."
+    },
+    {
+      "id": 20,
+      "difficulty": 4,
+      "question": "¿Qué son los dataclasses en Python 3.7+?",
+      "answers": ["Clases que auto-generan __init__, __repr__ y __eq__ basándose en las anotaciones de tipo de los campos", "Clases especiales para conectarse a bases de datos", "Clases que solo pueden contener tipos de datos primitivos", "Una forma de definir clases sin métodos"],
+      "correct": 0,
+      "explanation": "@dataclass sobre una clase genera automáticamente __init__(self, x, y, z), __repr__ y __eq__, eliminando boilerplate repetitivo."
+    },
+    {
+      "id": 21,
+      "difficulty": 4,
+      "question": "¿Cuál es la diferencia entre __new__ y __init__ en Python?",
+      "answers": ["__new__ crea el objeto (aloca memoria); __init__ lo inicializa con atributos", "Son el mismo método con nombres distintos", "__new__ solo existe en metaclases", "__init__ se llama antes que __new__"],
+      "correct": 0,
+      "explanation": "__new__ es un método estático que retorna la nueva instancia. __init__ la recibe como self y la configura. Se usa __new__ para Singleton o tipos inmutables como str."
+    },
+    {
+      "id": 22,
+      "difficulty": 4,
+      "question": "¿Qué es un metaclass en Python?",
+      "answers": ["Una clase cuyas instancias son clases; permite controlar la creación y comportamiento de clases", "Una clase abstracta que no puede instanciarse", "Una clase que hereda de múltiples clases", "Un patrón de diseño de Python"],
+      "correct": 0,
+      "explanation": "type es la metaclase por defecto. Al definir class Meta(type):, puedes interceptar la creación de clases, validar atributos o registrar subclases automáticamente."
+    },
+    {
+      "id": 23,
+      "difficulty": 5,
+      "question": "¿Qué es el descriptor protocol en Python?",
+      "answers": ["Un protocolo donde un objeto implementa __get__, __set__ o __delete__ para controlar el acceso a atributos de otra clase", "Un protocolo de serialización para objetos Python", "Una forma de describir la interfaz de un módulo", "Un mecanismo para documentar clases automáticamente"],
+      "correct": 0,
+      "explanation": "property, classmethod y staticmethod son descriptores. Al implementar __get__/__set__/__delete__, un objeto controla cómo se accede a él cuando es atributo de clase."
+    },
+    {
+      "id": 24,
+      "difficulty": 5,
+      "question": "¿Cómo funciona el MRO (Method Resolution Order) con herencia múltiple en Python?",
+      "answers": ["Python usa el algoritmo C3 Linearization para determinar el orden en que se buscan métodos en la jerarquía de herencia múltiple", "Python sigue el orden de declaración de izquierda a derecha siempre", "MRO solo aplica a métodos dunder", "Python no soporta herencia múltiple real"],
+      "correct": 0,
+      "explanation": "class C(A, B): aplica C3: C→A→B→object. Puedes verlo con C.__mro__. Garantiza que cada clase aparezca solo una vez y se respeten los órdenes locales."
+    },
+    {
+      "id": 25,
+      "difficulty": 5,
+      "question": "¿Qué es el __slots__ en Python y cuándo se usa?",
+      "answers": ["Una declaración que reemplaza el __dict__ por instancia por un almacenamiento fijo, reduciendo uso de memoria significativamente", "Un mecanismo para definir métodos de solo lectura", "Una lista de métodos permitidos en una clase", "Una forma de definir atributos de clase compartidos"],
+      "correct": 0,
+      "explanation": "class Punto: __slots__ = ['x', 'y'] ahorra ~40% de memoria por instancia al evitar el __dict__ dinámico. Ideal para clases con millones de instancias."
+    }
+  ],
+  "rewards": [
+    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
+    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
+    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
+    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
+    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
+  ]
+}

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMiMi - Quiz Interactivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+</head>
+
+<body>
+
+    <!-- PANTALLA DE SELECCIÓN DE QUIZ -->
+    <div id="selectionScreen" class="screen active">
+        <div class="selection-container">
+            <div class="intro-badge">Elige tu Quiz</div>
+            <h1 class="intro-title">¿Qué quieres<br><span>aprender hoy?</span></h1>
+            <p class="intro-subtitle">Selecciona el tema que deseas poner a prueba</p>
+            <div class="quiz-options-grid">
+                <button class="quiz-option-btn" data-file="questions.json" data-label="JavaScript" data-icon="🟨">
+                    <span class="option-icon">🟨</span>
+                    <span class="option-name">JavaScript</span>
+                    <span class="option-desc">Fundamentos y avanzado</span>
+                </button>
+                <button class="quiz-option-btn" data-file="questions_java.json" data-label="Java" data-icon="☕">
+                    <span class="option-icon">☕</span>
+                    <span class="option-name">Java</span>
+                    <span class="option-desc">POO y JVM</span>
+                </button>
+                <button class="quiz-option-btn" data-file="questions_angular.json" data-label="Angular" data-icon="🅰️">
+                    <span class="option-icon">🅰️</span>
+                    <span class="option-name">Angular</span>
+                    <span class="option-desc">Framework frontend</span>
+                </button>
+                <button class="quiz-option-btn" data-file="questions_python.json" data-label="Python" data-icon="🐍">
+                    <span class="option-icon">🐍</span>
+                    <span class="option-name">Python</span>
+                    <span class="option-desc">Scripting y backend</span>
+                </button>
+                <button class="quiz-option-btn" data-file="questions_sql.json" data-label="SQL" data-icon="🗄️">
+                    <span class="option-icon">🗄️</span>
+                    <span class="option-name">SQL</span>
+                    <span class="option-desc">Bases de datos</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE SELECCIÓN DE PERSONAJE -->
+    <div id="characterSelectScreen" class="screen">
+        <div class="char-select-container">
+            <div class="intro-badge">Elige tu Personaje</div>
+            <h1 class="intro-title">¿Quién te<br><span>acompañará?</span></h1>
+            <p class="intro-subtitle">Selecciona tu compañero de quiz</p>
+
+            <div class="char-select-grid">
+                <!-- Personaje 1: Mimi (bufanda) -->
+                <div class="char-select-card" id="selectChar1" data-char="char1">
+                    <div class="char-select-preview">
+                        <div class="char-select-wrap" id="previewChar1">
+                            <img class="layer" src="Imagenes/cabello_atras.png" alt="">
+                            <img class="layer" src="Imagenes/cuerpo.png" alt="">
+                            <img class="layer" src="Imagenes/bufanda_atras.png" alt="">
+                            <img class="layer" src="Imagenes/cuello.png" alt="">
+                            <img class="layer" src="Imagenes/bufanda adelante.png" alt="">
+                            <img class="layer" src="Imagenes/rostro.png" alt="">
+                            <img class="layer" src="Imagenes/oreja_left.png" alt="">
+                            <img class="layer" src="Imagenes/oreja_rigth.png" alt="">
+                            <img class="layer cs1-ojos" src="Imagenes/ojos.png" alt="">
+                            <img class="layer cs1-cejas" src="Imagenes/cejas1.png" alt="">
+                            <img class="layer cs1-pupilas" src="Imagenes/pupilas.png" alt="">
+                            <img class="layer cs1-ojos-cerr" src="Imagenes/ojos_cerrados.png" alt="" style="opacity:0">
+                            <img class="layer" src="Imagenes/nariz.png" alt="">
+                            <img class="layer cs1-boca-fel" src="Imagenes/boca_feliz.png" alt="">
+                            <img class="layer cs1-boca-trist" src="Imagenes/boca_triste.png" alt="" style="opacity:0">
+                            <img class="layer" src="Imagenes/mechon_superior.png" alt="">
+                            <img class="layer" src="Imagenes/mechones_inferiores.png" alt="">
+                        </div>
+                    </div>
+                    <div class="char-select-info">
+                        <span class="char-select-name">Alequis</span>
+                        <span class="char-select-desc">pennis dick</span>
+                    </div>
+                    <div class="char-select-check">✓</div>
+                </div>
+
+                <!-- Personaje 2: Javi (lentes/chompa) -->
+                <div class="char-select-card" id="selectChar2" data-char="char2">
+                    <div class="char-select-preview">
+                        <div class="char-select-wrap" id="previewChar2">
+                            <img class="layer" src="Imagenes_j/cabello_atras_j.png" alt="">
+                            <img class="layer" src="Imagenes_j/chompa_atras.png" alt="">
+                            <img class="layer" src="Imagenes_j/cuellito_atras.png" alt="">
+                            <img class="layer" src="Imagenes_j/cuello_j.png" alt="">
+                            <img class="layer" src="Imagenes_j/cuellito_adelante.png" alt="">
+                            <img class="layer" src="Imagenes_j/chompa_adelante.png" alt="">
+                            <img class="layer" src="Imagenes_j/rostro_j.png" alt="">
+                            <img class="layer" src="Imagenes_j/oreja_izq.png" alt="">
+                            <img class="layer" src="Imagenes_j/oreja_der.png" alt="">
+                            <img class="layer cs2-ojos" src="Imagenes_j/ojos_j.png" alt="">
+                            <img class="layer cs2-cejas" src="Imagenes_j/cejas_j.png" alt="">
+                            <img class="layer" src="Imagenes_j/lentes.png" alt="">
+                            <img class="layer cs2-pupilas" src="Imagenes_j/pupilas_j.png" alt="">
+                            <img class="layer cs2-ojos-cerr" src="Imagenes/ojos_cerrados.png" alt="" style="opacity:0">
+                            <img class="layer" src="Imagenes/nariz.png" alt="">
+                            <img class="layer cs2-boca-fel" src="Imagenes/boca_feliz.png" alt="">
+                            <img class="layer cs2-boca-trist" src="Imagenes/boca_triste.png" alt="" style="opacity:0">
+                            <img class="layer" src="Imagenes_j/mechones_superiores_j.png" alt="">
+                            <img class="layer" src="Imagenes_j/mechones_inferiores_j.png" alt="">
+                        </div>
+                    </div>
+                    <div class="char-select-info">
+                        <span class="char-select-name">JeanX</span>
+                        <span class="char-select-desc">six seven</span>
+                    </div>
+                    <div class="char-select-check">✓</div>
+                </div>
+            </div>
+
+            <button id="confirmCharBtn" class="btn btn-primary char-confirm-btn" disabled>
+                Continuar →
+            </button>
+        </div>
+    </div>
+
+    <!-- INTRO SCREEN -->
+    <div id="introScreen" class="screen">
+        <div class="intro-container">
+            <div class="intro-badge">Quiz Interactivo</div>
+            <h1 class="intro-title">Quiz de<br><span>Programación</span></h1>
+            <p class="intro-subtitle">Demuestra tus conocimientos y desbloquea premios especiales</p>
+            <div class="intro-character-wrap">
+                <img src="usagi-dance.gif" alt="dance">
+            </div>
+            <div class="intro-info">
+                <div class="info-pill">📚 15 preguntas</div>
+                <div class="info-pill">⏱ 15 seg/pregunta</div>
+                <div class="info-pill">🏆 Premios</div>
+            </div>
+            <button id="startBtn" class="btn btn-primary">Comenzar Quiz</button>
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" class="screen">
+        <div class="game-layout">
+            <header class="game-header">
+                <div class="progress-info">
+                    <span class="q-label">Pregunta <strong id="questionNum">1</strong> de 15</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+                <div class="score-chip">
+                    <span class="score-icon">⭐</span>
+                    <span id="scoreText">0%</span>
+                </div>
+            </header>
+
+            <div class="timer-wrap">
+                <div class="timer-bar" id="timerBar"></div>
+                <span class="timer-label" id="timerLabel">15</span>
+            </div>
+
+            <div class="game-body">
+                <div class="character-col">
+                    <div class="character-card">
+                        <div id="character">
+                            <!-- PERSONAJE 1-->
+                            <div class="char-wrap" id="charWrapChar1">
+                                <img class="layer" id="c-hair-back" src="Imagenes/cabello_atras.png" alt="">
+                                <img class="layer" id="c-cuerpo" src="Imagenes/cuerpo.png" alt="">
+                                <img class="layer" id="c-bufanda-atras" src="Imagenes/bufanda_atras.png" alt="">
+                                <img class="layer" id="c-cuello" src="Imagenes/cuello.png" alt="">
+                                <img class="layer" id="c-bufanda-del" src="Imagenes/bufanda adelante.png" alt="">
+                                <img class="layer" id="c-rostro" src="Imagenes/rostro.png" alt="">
+                                <img class="layer" id="c-oreja-l" src="Imagenes/oreja_left.png" alt="">
+                                <img class="layer" id="c-oreja-r" src="Imagenes/oreja_rigth.png" alt="">
+                                <img class="layer" id="c-ojos" src="Imagenes/ojos.png" alt="">
+                                <img class="layer" id="c-cejas" src="Imagenes/cejas1.png" alt="">
+                                <img class="layer" id="c-cejas-trist" src="Imagenes/cejas_tristes.png" alt="">
+                                <img class="layer" id="c-pupilas" src="Imagenes/pupilas.png" alt="">
+                                <img class="layer" id="c-ojos-cerr" src="Imagenes/ojos_cerrados.png" alt="">
+                                <img class="layer" id="c-ojos-trist" src="Imagenes/ojos_tristes.png" alt="">
+                                <img class="layer" id="c-nariz" src="Imagenes/nariz.png" alt="">
+                                <img class="layer" id="c-boca-fel" src="Imagenes/boca_feliz.png" alt="">
+                                <img class="layer" id="c-boca-trist" src="Imagenes/boca_triste.png" alt="">
+                                <img class="layer" id="c-mechon-sup" src="Imagenes/mechon_superior.png" alt="">
+                                <img class="layer" id="c-mech-inf" src="Imagenes/mechones_inferiores.png" alt="">
+                            </div>
+
+                            <!-- PERSONAJE 2-->
+                            <div class="char-wrap" id="charWrapChar2" style="display:none">
+                                <img class="layer" id="j-hair-back" src="Imagenes_j/cabello_atras_j.png" alt="">
+                                <img class="layer" id="j-cuerpo" src="Imagenes_j/chompa_atras.png" alt="">
+                                <img class="layer" id="j-bufanda-atras" src="Imagenes_j/cuellito_atras.png" alt="">
+                                <img class="layer" id="j-cuello" src="Imagenes_j/cuello_j.png" alt="">
+                                <img class="layer" id="j-bufanda-del" src="Imagenes_j/cuellito_adelante.png" alt="">
+                                <img class="layer" id="j-chompa-del" src="Imagenes_j/chompa_adelante.png" alt="">
+                                <img class="layer" id="j-rostro" src="Imagenes_j/rostro_j.png" alt="">
+                                <img class="layer" id="j-oreja-l" src="Imagenes_j/oreja_izq.png" alt="">
+                                <img class="layer" id="j-oreja-r" src="Imagenes_j/oreja_der.png" alt="">
+                                <img class="layer" id="j-ojos" src="Imagenes_j/ojos_j.png" alt="">
+                                <img class="layer" id="j-cejas" src="Imagenes_j/cejas_j.png" alt="">
+                                <img class="layer" id="j-lentes" src="Imagenes_j/lentes.png" alt="">
+                                <img class="layer" id="j-cejas-trist" src="Imagenes_j/cejas_tristes_j.png" alt="">
+                                <img class="layer" id="j-pupilas" src="Imagenes_j/pupilas_j.png" alt="">
+                                <img class="layer" id="j-ojos-cerr" src="Imagenes/ojos_cerrados.png" alt="">
+                                <img class="layer" id="j-ojos-trist" src="Imagenes/ojos_tristes.png" alt="">
+                                <img class="layer" id="j-nariz" src="Imagenes/nariz.png" alt="">
+                                <img class="layer" id="j-boca-fel" src="Imagenes/boca_feliz.png" alt="">
+                                <img class="layer" id="j-boca-trist" src="Imagenes/boca_triste.png" alt="">
+                                <img class="layer" id="j-mechon-sup" src="Imagenes_j/mechones_superiores_j.png" alt="">
+                                <img class="layer" id="j-mech-inf" src="Imagenes_j/mechones_inferiores_j.png" alt="">
+                            </div>
+                        </div>
+                        <p id="characterMsg" class="character-msg">¡Buena suerte! 🍀</p>
+                    </div>
+                </div>
+
+                <div class="quiz-col">
+                    <div class="quiz-card">
+                        <h2 id="questionText" class="question-text"></h2>
+                        <div id="answersContainer" class="answers-container"></div>
+                        <div id="explanationBlock" class="explanation-block hidden">
+                            <div class="explanation-icon">💡</div>
+                            <div>
+                                <p class="explanation-label">¿Por qué estaba mal?</p>
+                                <p id="explanationText" class="explanation-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quiz-footer">
+                        <button id="nextBtn" class="btn btn-primary btn-next" disabled>Siguiente →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="resultsScreen" class="screen">
+        <div class="results-container">
+            <div class="results-card">
+                <h2 class="results-title">Resultados</h2>
+                <div class="results-score-ring">
+                    <svg viewBox="0 0 120 120" width="140" height="140">
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#E8E0F5" stroke-width="10" />
+                        <circle id="scoreRing" cx="60" cy="60" r="52" fill="none" stroke="#9B7FD4" stroke-width="10"
+                            stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327"
+                            transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 1s ease" />
+                    </svg>
+                    <span class="results-pct" id="finalPercentage">0%</span>
+                </div>
+                <h3 id="rewardTitle" class="reward-title">—</h3>
+                <p id="rewardDescription" class="reward-desc"></p>
+                <div id="rewardContainer" class="reward-container"></div>
+                <button id="finishBtn" class="btn btn-primary">Volver a Intentar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONTRASEÑA -->
+    <div id="passwordModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-icon">🔐</div>
+            <h3 class="modal-title">Acceso al regalo sorpresa</h3>
+            <p class="modal-subtitle">Ingresa la contraseña para descargarlo</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="••••" maxlength="10" autocomplete="off">
+            <p id="passwordError" class="password-error hidden">❌ Contraseña incorrecta. Intenta de nuevo.</p>
+            <div class="modal-actions">
+                <button id="cancelPasswordBtn" class="btn btn-secondary">Cancelar</button>
+                <button id="confirmPasswordBtn" class="btn btn-primary">Descargar ⬇</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
