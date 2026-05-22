@@ -1170,15 +1170,15 @@ body {
 
 @media (max-width: 600px) {
     .char-select-container {
-        padding: 32px 18px 32px;
+        padding: 32px 10px 32px;
     }
     .char-select-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 12px;
+        gap: 10px;
     }
     .char-select-wrap {
-        width: 130px;
-        height: 160px;
+        width: 165px;
+        height: 200px;
     }
     .char-select-name {
         font-size: 15px;
@@ -1201,5 +1201,9 @@ body {
     }
     .modal-card {
         padding: 32px 22px;
+    }
+    .char-select-wrap {
+        width: 145px;
+        height: 175px;
     }
 }
