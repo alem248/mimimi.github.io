@@ -2,365 +2,270 @@
   "questions": [
     {
       "id": 1,
-      "difficulty": 1,
-      "question": "¿Cuál de los siguientes es un tipo de dato primitivo en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es el 'Event Loop' y cómo gestiona el código asíncrono en JavaScript?",
       "answers": [
-        "string",
-        "array",
-        "object",
-        "function"
+        "Un bucle infinito que coordina la ejecución del código, el procesamiento de eventos y la gestión de micro/macrotareas en un solo hilo.",
+        "Un motor de paralelismo nativo que distribuye las funciones pesadas entre todos los núcleos del procesador del cliente en tiempo real.",
+        "Es un sistema de gestión de memoria que limpia los objetos inútiles antes de que lleguen al Garbage Collector principal de la V8.",
+        "Un servidor de caché en la nube que intercepta las llamadas HTTP antes de que lleguen al navegador del usuario."
       ],
       "correct": 0,
-      "explanation": "En JavaScript los tipos primitivos son: string, number, boolean, null, undefined, symbol y bigint. Array y object son tipos de referencia."
+      "explanation": "JS es monohilo. El Event Loop permite que parezca que hace varias cosas a la vez al poner tareas pesadas (I/O) en una cola y ejecutarlas solo cuando el hilo principal está libre."
     },
     {
       "id": 2,
-      "difficulty": 1,
-      "question": "¿Qué palabra clave se usa para declarar una variable que NO puede ser reasignada?",
+      "difficulty": 5,
+      "question": "¿Cuál es la diferencia entre 'undefined' y 'null'?",
       "answers": [
-        "const",
-        "let",
-        "var",
-        "static"
+        "undefined es un valor asignado automáticamente por JS a variables no inicializadas; null es una asignación explícita de 'vacío' hecha por el programador.",
+        "null es el tipo por defecto de las variables let; undefined es el tipo de variables declaradas con var que aún no tienen valor.",
+        "No existe diferencia; son intercambiables y el intérprete los trata de la misma forma en las comparaciones de identidad estricta (===).",
+        "undefined solo se usa en objetos; null solo se usa en arrays; intentar usarlos de forma cruzada genera un error de tipo en tiempo de ejecución."
       ],
       "correct": 0,
-      "explanation": "'const' declara una variable cuya referencia no puede cambiar. 'let' y 'var' sí permiten reasignación."
+      "explanation": "undefined = 'el sistema no sabe qué hay aquí'. null = 'yo, programador, he puesto este valor deliberadamente para decir que no hay nada'."
     },
     {
       "id": 3,
-      "difficulty": 1,
-      "question": "¿Qué devuelve typeof null en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es un 'Closure' en JavaScript?",
       "answers": [
-        "\"object\"",
-        "\"null\"",
-        "\"undefined\"",
-        "\"boolean\""
+        "Una función que 'recuerda' el ámbito léxico en el que fue creada, incluso si es ejecutada fuera de ese ámbito original.",
+        "Un bloque de código que se bloquea hasta que todas las promesas internas sean resueltas, evitando problemas de concurrencia.",
+        "Un método especial para cerrar las conexiones de red abiertas en un objeto antes de que el script finalice su ejecución.",
+        "Una técnica de compresión de código que reduce el tamaño de las funciones para que ocupen menos espacio en el archivo JS final."
       ],
       "correct": 0,
-      "explanation": "Es un bug histórico de JavaScript. typeof null retorna \"object\" aunque null no es un objeto real."
+      "explanation": "Los closures son fundamentales: permiten que una función interna tenga acceso a variables de la función externa, manteniendo su estado vivo."
     },
     {
       "id": 4,
-      "difficulty": 1,
-      "question": "¿Cuál es la forma correcta de escribir un comentario de una sola línea en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es el 'Hoisting' en JavaScript?",
       "answers": [
-        "// comentario",
-        "# comentario",
-        "<!-- comentario -->",
-        "** comentario **"
+        "El comportamiento del motor donde las declaraciones de variables (var) y funciones son elevadas al inicio de su ámbito de ejecución.",
+        "Un proceso de optimización del compilador donde las funciones más lentas son reemplazadas por alternativas más rápidas en tiempo de ejecución.",
+        "El mecanismo mediante el cual JS eleva la prioridad de las operaciones matemáticas en el árbol de sintaxis abstracta para ganar velocidad.",
+        "La técnica de mover todo el código de un archivo a un servidor remoto para que la página cargue más rápido sin descargar el JS completo."
       ],
       "correct": 0,
-      "explanation": "En JavaScript los comentarios de una línea comienzan con //. Los de varias líneas usan /* ... */."
+      "explanation": "JS lee el archivo dos veces: una para declarar todo lo que sea `var` o `function` y otra para ejecutar. Por eso puedes llamar a una función antes de definirla."
     },
     {
       "id": 5,
-      "difficulty": 1,
-      "question": "¿Qué método se usa para añadir un elemento al final de un array?",
+      "difficulty": 5,
+      "question": "¿Por qué el uso de 'var' es considerado un antipatrón en el desarrollo moderno?",
       "answers": [
-        "push()",
-        "pop()",
-        "shift()",
-        "append()"
+        "Por su ámbito de función y su hoisting propenso a errores; let y const tienen ámbito de bloque, siendo más seguros y predecibles.",
+        "Porque var es una palabra reservada para uso exclusivo del sistema y si el programador la usa, el navegador la bloquea por seguridad.",
+        "Debido a que var hace que el código JS sea incomprensible para los motores de búsqueda, penalizando gravemente el SEO de la web.",
+        "Porque var solo puede almacenar tipos de datos primitivos y falla al intentar guardar objetos complejos o arrays definidos con corchetes."
       ],
       "correct": 0,
-      "explanation": "push() agrega uno o más elementos al final del array y retorna la nueva longitud. pop() elimina el último."
+      "explanation": "`var` no respeta los bloques `{ }` (como un `if` o `for`). `let` y `const` fueron introducidos en ES6 para arreglar este desastre lógico."
     },
     {
       "id": 6,
-      "difficulty": 1,
-      "question": "¿Qué operador se usa para comparar valor Y tipo en JavaScript?",
+      "difficulty": 4,
+      "question": "¿Qué es la 'Coerción de tipos' (Implicit Type Coercion)?",
       "answers": [
-        "===",
-        "==",
-        "=",
-        "!="
+        "La conversión automática de tipos que hace el motor al operar con valores de tipos distintos.",
+        "Usar parseInt() o Number() para convertir strings manualmente antes de hacer cálculos matemáticos.",
+        "El proceso de castear tipos en TypeScript para cumplir con las reglas del compilador antes de transpilar a JS.",
+        "La validación estricta de tipos de datos en tiempo de compilación impuesta por el estándar ECMAScript 2024."
       ],
       "correct": 0,
-      "explanation": "=== es igualdad estricta: compara valor y tipo sin conversión. == hace coerción de tipos antes de comparar."
+      "explanation": "JS convierte tipos automáticamente. Por ejemplo: '5' - 2 da 3 (string -> número), pero '5' + 2 da '52' (número -> string) por el operador +."
     },
     {
       "id": 7,
-      "difficulty": 2,
-      "question": "¿Qué resultado produce: console.log(0.1 + 0.2 === 0.3)?",
+      "difficulty": 4,
+      "question": "¿Qué diferencia existe entre 'call', 'apply' y 'bind'?",
       "answers": [
-        "false",
-        "true",
-        "NaN",
-        "undefined"
+        "call y apply invocan la función inmediatamente (pasando argumentos como lista o array); bind retorna una nueva función con el contexto ya fijado.",
+        "Son solo alias para invocar funciones; no hay diferencia técnica entre ellos, todos hacen lo mismo con el objeto 'this'.",
+        "bind es para objetos; apply es para clases; call es para funciones sueltas definidas fuera de un contexto de clase.",
+        "call sirve para llamadas síncronas; apply para asíncronas; bind es para definir funciones en el ámbito global del sistema."
       ],
       "correct": 0,
-      "explanation": "Debido a la representación de punto flotante IEEE 754, 0.1 + 0.2 da 0.30000000000000004, no 0.3 exacto."
+      "explanation": "Son la forma de manipular `this` en JS. `call(this, a, b)`, `apply(this, [a, b])` y `bind(this)` que te da la función lista para usar después."
     },
     {
       "id": 8,
-      "difficulty": 2,
-      "question": "¿Qué es una closure en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es una 'Promise' en JavaScript?",
       "answers": [
-        "Una función que recuerda el entorno léxico donde fue creada, incluso después de que ese entorno haya cerrado",
-        "Un bloque try-catch que captura errores",
-        "Una función que no retorna ningún valor",
-        "Un método para cerrar conexiones HTTP"
+        "Un objeto que representa la terminación (o falla) eventual de una operación asíncrona y su valor resultante.",
+        "Un alias para una función síncrona que está garantizada para ejecutarse en menos de un milisegundo.",
+        "Un contenedor de seguridad para proteger los datos contra ataques de inyección antes de enviarlos a una API.",
+        "Una palabra clave reservada del lenguaje que detiene el flujo de ejecución del programa hasta que el servidor responde."
       ],
       "correct": 0,
-      "explanation": "Las closures permiten que una función interna acceda a variables de su función padre aunque esta ya haya terminado de ejecutarse."
+      "explanation": "Las promesas reemplazaron los 'callback hell'. Te permiten encadenar operaciones asíncronas de forma limpia (.then(), .catch())."
     },
     {
       "id": 9,
-      "difficulty": 2,
-      "question": "¿Qué hace el método Array.prototype.map()?",
+      "difficulty": 4,
+      "question": "¿Para qué sirve el operador de propagación 'spread' (...)?",
       "answers": [
-        "Crea un nuevo array aplicando una función a cada elemento",
-        "Filtra elementos que cumplan una condición",
-        "Reduce el array a un solo valor",
-        "Busca un elemento y retorna true o false"
+        "Para expandir elementos de un array o propiedades de un objeto en lugares donde se esperan cero o más argumentos/elementos.",
+        "Para comprimir archivos JS en el servidor y mejorar la velocidad de transferencia durante la descarga inicial de la página.",
+        "Para crear copias profundas de objetos complejos, eliminando cualquier enlace a la estructura original de datos en memoria.",
+        "Para inyectar valores dinámicos dentro de cadenas de texto sin necesidad de concatenar usando el símbolo de más."
       ],
       "correct": 0,
-      "explanation": "map() transforma cada elemento con un callback y retorna un nuevo array de igual longitud. No modifica el original."
+      "explanation": "Es super útil: `const nuevo = [...antiguo, 4]` es la forma moderna de añadir elementos sin mutar el original."
     },
     {
       "id": 10,
-      "difficulty": 2,
-      "question": "¿Qué es el hoisting en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué diferencia hay entre una función de flecha ('arrow function') y una función tradicional?",
       "answers": [
-        "El comportamiento de mover declaraciones al inicio de su scope antes de ejecutar el código",
-        "Una forma de optimizar bucles",
-        "Un método para clonar objetos",
-        "La ejecución de funciones en paralelo"
+        "Las arrow functions no tienen su propio contexto 'this'; heredan el 'this' del ámbito donde fueron definidas.",
+        "Las arrow functions son mucho más lentas que las tradicionales porque deben compilarse de forma dinámica en cada uso.",
+        "No puedes declarar arrow functions dentro de otras funciones, solo pueden existir en el ámbito global del archivo JS.",
+        "Las arrow functions no permiten recibir parámetros; solo pueden procesar variables que ya están definidas en el ámbito global."
       ],
       "correct": 0,
-      "explanation": "El motor de JS procesa las declaraciones de variables (var) y funciones antes de ejecutar el código, como si las 'elevara' al tope del scope."
+      "explanation": "El `this` en una función tradicional cambia según quién llame a la función. En una arrow function, `this` siempre es lo que estaba definido en el lugar donde creaste la arrow."
     },
     {
       "id": 11,
-      "difficulty": 2,
-      "question": "¿Cuál es la salida de: console.log(typeof [])?",
+      "difficulty": 4,
+      "question": "¿Qué es el 'Destructuring' en JavaScript?",
       "answers": [
-        "\"object\"",
-        "\"array\"",
-        "\"undefined\"",
-        "\"list\""
+        "Una sintaxis que permite extraer datos de arrays u objetos y asignarlos a variables de forma rápida y concisa.",
+        "Una técnica para romper enlaces entre objetos y variables con el fin de liberar memoria y evitar fugas al cerrar una página.",
+        "El proceso de desarmar una función compleja en funciones más pequeñas para mejorar la legibilidad y el mantenimiento del código.",
+        "Un método para eliminar elementos de un array que no cumplen con ciertas condiciones de negocio predefinidas."
       ],
       "correct": 0,
-      "explanation": "En JavaScript los arrays son objetos, por eso typeof [] retorna \"object\". Para verificar si es array usa Array.isArray()."
+      "explanation": "Ejemplo: `const { nombre } = usuario;` es mucho más limpio que `const nombre = usuario.nombre;`."
     },
     {
       "id": 12,
-      "difficulty": 2,
-      "question": "¿Qué hace el operador spread (...) en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es un 'Generator' function en JS?",
       "answers": [
-        "Expande los elementos de un iterable en lugares donde se esperan múltiples argumentos",
-        "Crea una copia profunda de un objeto",
-        "Encadena promesas",
-        "Define propiedades opcionales en un objeto"
+        "Una función que puede pausar su ejecución y reanudarla posteriormente, manteniendo su estado interno mediante la palabra 'yield'.",
+        "Un script que genera automáticamente el archivo JS minimizado para producción, eliminando comentarios y espacios en blanco.",
+        "Una forma de crear funciones infinitas que consumen toda la memoria RAM para realizar pruebas de estrés en el navegador.",
+        "Un tipo de función que se ejecuta en el servidor automáticamente cada vez que un usuario hace clic en un botón en el frontend."
       ],
       "correct": 0,
-      "explanation": "El spread operator (...) expande arrays u objetos. Ejemplo: [...arr1, ...arr2] combina dos arrays en uno nuevo."
+      "explanation": "Los generadores son útiles para flujos complejos: pides un valor, el generador hace un cálculo complejo, te da el valor y se 'congela' esperando a que le pidas el siguiente."
     },
     {
       "id": 13,
-      "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre call() y apply() en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es el 'Prototype' en JavaScript?",
       "answers": [
-        "call() recibe argumentos separados por coma; apply() recibe un array de argumentos",
-        "apply() es síncrono; call() es asíncrono",
-        "call() solo funciona con arrow functions",
-        "No hay diferencia funcional entre ambos"
+        "El mecanismo mediante el cual los objetos en JS heredan características de otros objetos (herencia basada en prototipos).",
+        "El archivo principal donde se define la arquitectura de la aplicación antes de empezar a escribir cualquier línea de código.",
+        "Un estándar para definir las interfaces de los objetos que deben ser respetadas por todas las clases creadas en la aplicación.",
+        "El nombre del objeto especial que contiene todas las funciones reservadas del navegador que no están disponibles para el usuario."
       ],
       "correct": 0,
-      "explanation": "Ambos invocan una función con un 'this' dado. La diferencia está en cómo pasan argumentos: fn.call(ctx, a, b) vs fn.apply(ctx, [a, b])."
+      "explanation": "JS no tiene clases de verdad (son azúcar sintáctico). Todo funciona añadiendo funciones y propiedades al prototipo de un objeto. Así es como un array sabe qué es `.map()`."
     },
     {
       "id": 14,
-      "difficulty": 3,
-      "question": "¿Qué retorna una función async cuando se llama?",
+      "difficulty": 4,
+      "question": "¿Cuál es la diferencia entre '===' y '=='?",
       "answers": [
-        "Siempre retorna una Promise",
-        "Retorna el valor directamente sin envolver",
-        "Retorna undefined siempre",
-        "Retorna un objeto Iterator"
+        "=== compara valor y tipo (identidad estricta); == intenta convertir los tipos antes de comparar (coerción).",
+        "== es para números; === es para strings; usar el incorrecto genera un error de sintaxis en la consola del navegador.",
+        "=== es más rápido porque omite la validación de tipos; == es más lento porque realiza una validación exhaustiva de memoria.",
+        "No hay diferencia; ECMAScript recomienda usar == por compatibilidad con los primeros navegadores desarrollados en los 90."
       ],
       "correct": 0,
-      "explanation": "Una función async siempre retorna una Promise. Si retorna un valor, la Promise se resuelve con ese valor."
+      "explanation": "== es peligroso porque `'5' == 5` es `true`. Usa siempre `===` para evitar errores extraños por conversión automática."
     },
     {
       "id": 15,
-      "difficulty": 3,
-      "question": "¿Qué es el Event Loop en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es un 'Symbol' en JavaScript?",
       "answers": [
-        "Un mecanismo que permite ejecutar código asíncrono coordinando el call stack con la cola de callbacks",
-        "Un bucle especial para manejar eventos del DOM",
-        "Una API del navegador para escuchar eventos del teclado",
-        "Un patrón de diseño para componentes de UI"
+        "Un tipo de dato primitivo que es único e inmutable, útil como identificador para propiedades de objetos y evitar colisiones.",
+        "Un símbolo matemático para realizar operaciones avanzadas de trigonometría que el objeto Math nativo no soporta por defecto.",
+        "Una palabra clave especial que permite marcar una función para que sea ejecutada en un hilo secundario del procesador.",
+        "Es un alias para una clase especial que no se puede instanciar y sirve solo para agrupar constantes estáticas."
       ],
       "correct": 0,
-      "explanation": "El Event Loop revisa continuamente si el call stack está vacío y, si lo está, mueve callbacks de la queue al stack para ejecutarlos."
+      "explanation": "Si necesitas una propiedad en un objeto que nadie pueda sobreescribir por accidente, usa un Symbol. `Symbol('id') === Symbol('id')` es false."
     },
     {
       "id": 16,
-      "difficulty": 3,
-      "question": "¿Qué diferencia hay entre let y var respecto al scope?",
+      "difficulty": 4,
+      "question": "¿Para qué sirve el método 'reduce' en un array?",
       "answers": [
-        "let tiene block scope; var tiene function scope",
-        "var tiene block scope; let tiene global scope",
-        "Ambos tienen exactamente el mismo scope",
-        "let solo puede usarse dentro de clases"
+        "Para ejecutar una función sobre cada elemento del array y devolver un único valor acumulado (como una suma o un objeto).",
+        "Para eliminar elementos duplicados de un array basándose en una función de comparación compleja personalizada por el usuario.",
+        "Para ordenar un array basándose en un criterio de búsqueda definido en una función externa a la colección de datos.",
+        "Para buscar la posición de un elemento específico dentro de un array y devolver su índice o -1 si no se encuentra."
       ],
       "correct": 0,
-      "explanation": "var está disponible en toda la función donde se declara. let está limitado al bloque {} donde se declara, evitando bugs comunes."
+      "explanation": "Reduce es el método más poderoso: puedes pasar de un array a lo que sea (un número, un objeto agrupado, otro array). Es la base del paradigma funcional en JS."
     },
     {
       "id": 17,
-      "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre null y undefined en JavaScript?",
+      "difficulty": 5,
+      "question": "¿Qué es el 'Strict Mode' ('use strict')?",
       "answers": [
-        "null es asignado intencionalmente; undefined significa que la variable existe pero no tiene valor asignado",
-        "Son exactamente lo mismo",
-        "undefined se asigna manualmente; null lo pone el motor",
-        "null solo aplica a objetos; undefined a funciones"
+        "Una forma de optar por una variante más restrictiva de JS que lanza errores ante comportamientos 'silenciosos' comunes y errores de sintaxis.",
+        "Una configuración de seguridad que impide que el usuario descargue scripts de dominios externos para prevenir ataques de inyección.",
+        "Un modo de depuración que inyecta código de inspección de variables en cada línea del programa para facilitar el rastreo de errores.",
+        "El estándar que todos los navegadores modernos aplican automáticamente y que no se puede desactivar bajo ninguna circunstancia."
       ],
       "correct": 0,
-      "explanation": "undefined lo asigna JavaScript automáticamente cuando una variable no tiene valor. null es un valor que el programador asigna para indicar 'sin valor'."
+      "explanation": "JS es muy permisivo. Con 'use strict' activado, JS te regaña si haces cosas malas (ej. usar una variable no declarada). Es buena práctica siempre."
     },
     {
       "id": 18,
       "difficulty": 4,
-      "question": "¿Qué salida produce este código?\nconst a = [1,2,3];\nconst b = a;\nb.push(4);\nconsole.log(a.length);",
+      "question": "¿Qué es la 'Async/Await' sintaxis?",
       "answers": [
-        "4",
-        "3",
-        "undefined",
-        "Error en tiempo de ejecución"
+        "Una forma más legible y concisa de escribir código basado en Promesas, haciendo que el flujo asíncrono parezca síncrono.",
+        "Un comando para ejecutar código JS de forma paralela en múltiples procesadores, eliminando el bloqueo del hilo principal.",
+        "Una herramienta para transformar código síncrono en código asíncrono de forma automática mediante un compilador interno del navegador.",
+        "Es un tipo de decoración que marca las funciones para que sean ejecutadas después de que la página ha terminado de cargar el DOM."
       ],
       "correct": 0,
-      "explanation": "Los arrays son objetos y se asignan por referencia. b y a apuntan al mismo array en memoria, así que push(4) afecta a ambos."
+      "explanation": "Es la mejor forma de manejar promesas. En lugar de `.then().then().then()`, escribes un `await` y el código espera ahí de forma elegante."
     },
     {
       "id": 19,
-      "difficulty": 4,
-      "question": "¿Cuál es el resultado de: console.log([] + [])?",
+      "difficulty": 5,
+      "question": "¿Qué es un 'WeakMap' en JavaScript?",
       "answers": [
-        "\"\" (string vacío)",
-        "0",
-        "[]",
-        "NaN"
+        "Un mapa donde las claves deben ser objetos y son mantenidas débilmente, permitiendo que el GC las limpie si no hay otras referencias.",
+        "Un tipo de mapa diseñado para guardar únicamente cadenas de texto, optimizado para búsquedas rápidas en bases de datos pequeñas.",
+        "Un objeto que almacena datos en la memoria caché del navegador que no se borran al cerrar la pestaña o refrescar el sitio.",
+        "Es un alias para una clase de mapa que soporta millones de elementos sin consumir memoria, usando técnicas de compresión de bytes."
       ],
       "correct": 0,
-      "explanation": "Cuando se suman arrays con +, se convierten a string. [].toString() es \"\", así que \"\" + \"\" = \"\", un string vacío."
+      "explanation": "Si necesitas asociar datos a un objeto pero no quieres impedir que el objeto sea borrado por el GC cuando ya no se usa, usa WeakMap. Es vital para evitar memory leaks."
     },
     {
       "id": 20,
-      "difficulty": 4,
-      "question": "¿Qué es la delegación de eventos (event delegation)?",
-      "answers": [
-        "Asignar un listener al elemento padre para manejar eventos de sus hijos aprovechando el bubbling",
-        "Crear un evento personalizado con CustomEvent",
-        "Detener la propagación de eventos con stopPropagation()",
-        "Asignar múltiples listeners al mismo elemento"
-      ],
-      "correct": 0,
-      "explanation": "En lugar de poner un listener en cada hijo, se pone uno en el padre. Los eventos burbujean (bubble) hacia arriba y el padre los intercepta."
-    },
-    {
-      "id": 21,
-      "difficulty": 4,
-      "question": "¿Qué hace Object.freeze() en JavaScript?",
-      "answers": [
-        "Impide agregar, eliminar o modificar propiedades del objeto",
-        "Crea una copia profunda del objeto",
-        "Congela el prototipo del objeto",
-        "Convierte el objeto en un string JSON"
-      ],
-      "correct": 0,
-      "explanation": "Object.freeze() hace al objeto inmutable a nivel superficial: no se pueden añadir, quitar ni cambiar propiedades. No afecta objetos anidados."
-    },
-    {
-      "id": 22,
-      "difficulty": 4,
-      "question": "¿Qué patrón implementa este código?\nconst s = (() => { let i; return { get: () => i || (i = {}) }; })();",
-      "answers": [
-        "Singleton mediante IIFE",
-        "Factory pattern",
-        "Observer pattern",
-        "Module pattern sin instancia única"
-      ],
-      "correct": 0,
-      "explanation": "Es un Singleton: usa una IIFE (Immediately Invoked Function Expression) para crear una única instancia y exponerla a través de un getter."
-    },
-    {
-      "id": 23,
       "difficulty": 5,
-      "question": "¿Cuál es la diferencia entre microtasks y macrotasks en el Event Loop?",
+      "question": "¿Cómo maneja JavaScript la 'Recursión' y qué es un 'Stack Overflow'?",
       "answers": [
-        "Las microtasks (Promise callbacks) se ejecutan antes que las macrotasks (setTimeout) tras cada tarea del call stack",
-        "Las macrotasks tienen mayor prioridad que las microtasks",
-        "Son lo mismo, solo cambia el nombre según el entorno",
-        "Las microtasks solo existen en Node.js"
+        "JS maneja recursión mediante llamadas a la pila de ejecución; el Stack Overflow ocurre cuando la pila supera su límite máximo por recursión infinita.",
+        "JS no soporta recursión; intenta compilarla a bucles `for` automáticamente y lanza error si no es posible hacer la conversión.",
+        "JS eleva todas las funciones recursivas al hilo de ejecución asíncrona para que no ocupen espacio en la pila principal del programa.",
+        "El Stack Overflow es un error de memoria que ocurre cuando el objeto global Window se llena de variables y no puede crear nuevas."
       ],
       "correct": 0,
-      "explanation": "Tras cada macrotask (setTimeout, setInterval), el motor vacía toda la cola de microtasks (Promise.then, queueMicrotask) antes de pasar a la siguiente macrotask."
-    },
-    {
-      "id": 24,
-      "difficulty": 5,
-      "question": "¿Qué es el prototype chain en JavaScript?",
-      "answers": [
-        "Un mecanismo por el que los objetos heredan propiedades y métodos de su prototipo de forma encadenada hasta llegar a null",
-        "Una lista enlazada de promesas",
-        "La cadena de imports en módulos ES6",
-        "El orden de ejecución de los event listeners"
-      ],
-      "correct": 0,
-      "explanation": "Cuando accedes a una propiedad, JS la busca en el objeto, luego en su __proto__, y sigue subiendo por la cadena hasta Object.prototype o null."
-    },
-    {
-      "id": 25,
-      "difficulty": 5,
-      "question": "¿Qué es la coerción de tipos implícita en JavaScript?",
-      "answers": [
-        "La conversión automática de tipos que hace el motor al operar con valores de tipos distintos",
-        "Usar parseInt() o Number() para convertir strings manualmente",
-        "El proceso de castear tipos en TypeScript",
-        "La validación de tipos en tiempo de compilación"
-      ],
-      "correct": 0,
-      "explanation": "JS convierte tipos automáticamente. Por ejemplo: '5' - 2 da 3 (string → número), pero '5' + 2 da '52' (número → string) por el operador +."
+      "explanation": "Cada vez que una función se llama a sí misma, se añade un 'marco' al stack. Si nunca paras, el stack crece hasta que explota. JS no tiene 'Tail Call Optimization' en la mayoría de los motores modernos."
     }
   ],
   "rewards": [
-    {
-      "minScore": 0,
-      "maxScore": 19,
-      "title": "NOVATA",
-      "description": "Practica más",
-      "message": "Sé que puedes lograrlo. ¡No te rindas!"
-    },
-    {
-      "minScore": 20,
-      "maxScore": 49,
-      "title": "EN PRÁCTICA",
-      "description": "Vas bien, pero esfuérzate más",
-      "message": "Se nota la práctica. Solo hay que pulirla."
-    },
-    {
-      "minScore": 50,
-      "maxScore": 74,
-      "title": "INTERMEDIA",
-      "description": "¡Buen dominio del juego!",
-      "message": "Estás a mitad de camino. Sigue así y llegarás lejos."
-    },
-    {
-      "minScore": 75,
-      "maxScore": 94,
-      "title": "AVANZADA",
-      "description": "Nivel sobresaliente",
-      "message": "¡Impresionante! Tu técnica está casi al máximo."
-    },
-    {
-      "minScore": 95,
-      "maxScore": 100,
-      "title": "EXPERTA",
-      "description": "¡Dominio total!",
-      "message": "¡Eres una leyenda! Has alcanzado la cima del éxito."
-    }
+    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
+    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
+    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
+    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
+    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
   ]
 }
