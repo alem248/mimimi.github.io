@@ -2,210 +2,33 @@
   "questions": [
     {
       "id": 1,
-      "difficulty": 1,
-      "question": "¿Cuál es la cláusula SQL para filtrar filas en una consulta?",
-      "answers": ["WHERE", "HAVING", "FILTER", "LIMIT"],
+      "difficulty": 5,
+      "question": "¿Qué ocurre exactamente al ejecutar una consulta con la cláusula NOT IN si la subconsulta retorna al menos un valor NULL?",
+      "answers": [
+        "Falla silenciosamente evaluando a UNKNOWN, provocando que la cláusula WHERE filtre absolutamente todos los registros.",
+        "Genera un error de sintaxis en tiempo de compilación debido a que los motores relacionales modernos bajo el estándar ANSI exigen que toda subconsulta con NOT IN incluya un IS NOT NULL explícito.",
+        "Retorna todas las filas de la tabla externa que no coincidan de manera exacta con los valores no nulos, aplicando una regla de exclusión difusa que optimiza el plan de ejecución omitiendo el NULL.",
+        "El optimizador intercepta el valor nulo antes de ejecutar la proyección temporal en memoria y lo convierte automáticamente en un string vacío o cero lógico para evitar un colapso en el Table Scan."
+      ],
       "correct": 0,
-      "explanation": "WHERE filtra filas antes de agrupar. HAVING filtra grupos después de GROUP BY. Ejemplo: SELECT * FROM empleados WHERE salario > 3000;"
+      "explanation": "El estándar ANSI SQL dicta que NULL no es igual ni distinto a nada. NOT IN (A, B, NULL) se traduce a: col != A AND col != B AND col != NULL. Como col != NULL siempre evalúa a UNKNOWN, la condición falla para todas las filas."
     },
     {
       "id": 2,
-      "difficulty": 1,
-      "question": "¿Qué hace SELECT DISTINCT en SQL?",
-      "answers": ["Elimina filas duplicadas del resultado", "Selecciona solo columnas diferentes", "Ordena los resultados de forma única", "Filtra valores nulos"],
+      "difficulty": 5,
+      "question": "¿Cuál es el impacto en el plan de ejecución y el resultado al usar COUNT(columna) frente a COUNT(*) en una consulta con LEFT JOIN?",
+      "answers": [
+        "COUNT(columna) ignora los nulos evaluando registro por registro; COUNT(*) cuenta todas las filas producidas en la proyección.",
+        "No existe diferencia en el resultado final, pero COUNT(columna) obliga al optimizador a realizar un escaneo completo de la tabla, mientras que COUNT(*) aprovecha invariablemente el índice de la clave primaria.",
+        "COUNT(*) genera una anomalía estructural si la tabla derecha carece de registros coincidentes, obligando a implementar subconsultas anidadas complejas para manejar la integridad referencial.",
+        "COUNT(columna) bloquea la tabla durante la ejecución para contar bloqueos sucios, mientras que COUNT(*) opera exclusivamente a nivel de metadatos del diccionario de la base de datos sin afectar la concurrencia."
+      ],
       "correct": 0,
-      "explanation": "DISTINCT elimina filas duplicadas: SELECT DISTINCT ciudad FROM clientes retorna cada ciudad una sola vez aunque aparezca varias veces en la tabla."
+      "explanation": "COUNT(*) cuenta filas resultantes, incluyendo las rellenadas con NULLs por la falta de coincidencia en el LEFT JOIN. Para saber cuántos registros hijos existen realmente, se usa COUNT(columna_hija) porque ignora los NULLs."
     },
     {
       "id": 3,
-      "difficulty": 1,
-      "question": "¿Qué función SQL cuenta el número de filas?",
-      "answers": ["COUNT()", "SUM()", "TOTAL()", "NUM()"],
-      "correct": 0,
-      "explanation": "COUNT(*) cuenta todas las filas incluyendo NULLs. COUNT(columna) cuenta filas donde esa columna no es NULL. Es una función de agregación."
-    },
-    {
-      "id": 4,
-      "difficulty": 1,
-      "question": "¿Cuál es el orden correcto de cláusulas en un SELECT de SQL?",
-      "answers": ["SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY", "FROM → SELECT → WHERE → ORDER BY → GROUP BY", "SELECT → WHERE → FROM → GROUP BY → HAVING", "FROM → WHERE → SELECT → GROUP BY → ORDER BY"],
-      "correct": 0,
-      "explanation": "El orden lógico de escritura es: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT. El motor SQL los evalúa en un orden diferente internamente."
-    },
-    {
-      "id": 5,
-      "difficulty": 1,
-      "question": "¿Qué hace la cláusula ORDER BY en SQL?",
-      "answers": ["Ordena los resultados por una o más columnas de forma ascendente (ASC) o descendente (DESC)", "Agrupa los resultados por columnas", "Filtra filas duplicadas", "Limita el número de resultados"],
-      "correct": 0,
-      "explanation": "ORDER BY columna ASC ordena de menor a mayor (defecto). ORDER BY columna DESC ordena de mayor a menor."
-    },
-    {
-      "id": 6,
-      "difficulty": 1,
-      "question": "¿Qué comando SQL se usa para insertar una nueva fila?",
-      "answers": ["INSERT INTO tabla (col1, col2) VALUES (val1, val2)", "ADD INTO tabla VALUES (val1, val2)", "PUT tabla (col1) = val1", "CREATE ROW en tabla"],
-      "correct": 0,
-      "explanation": "INSERT INTO es el comando DML para agregar filas. Se especifica la tabla, las columnas y los valores correspondientes."
-    },
-    {
-      "id": 7,
-      "difficulty": 2,
-      "question": "¿Cuál es la diferencia entre INNER JOIN y LEFT JOIN?",
-      "answers": ["INNER JOIN retorna solo filas con coincidencia en ambas tablas; LEFT JOIN retorna todas las filas de la tabla izquierda, con NULL donde no hay coincidencia", "LEFT JOIN es más lento que INNER JOIN", "INNER JOIN incluye NULLs automáticamente", "Son idénticos cuando las tablas tienen la misma cantidad de filas"],
-      "correct": 0,
-      "explanation": "INNER JOIN: solo intersección. LEFT JOIN: todas las filas de la izquierda + datos de la derecha donde coincidan (NULL si no hay match)."
-    },
-    {
-      "id": 8,
-      "difficulty": 2,
-      "question": "¿Qué hace GROUP BY en SQL?",
-      "answers": ["Agrupa filas con el mismo valor en la columna especificada para aplicar funciones de agregación por grupo", "Ordena los grupos alfabéticamente", "Elimina duplicados igual que DISTINCT", "Combina varias tablas en una"],
-      "correct": 0,
-      "explanation": "SELECT departamento, AVG(salario) FROM empleados GROUP BY departamento calcula el salario promedio por cada departamento."
-    },
-    {
-      "id": 9,
-      "difficulty": 2,
-      "question": "¿Cuándo se usa HAVING en lugar de WHERE?",
-      "answers": ["HAVING filtra grupos después de GROUP BY; WHERE filtra filas antes de agrupar", "HAVING es equivalente a WHERE pero más eficiente", "HAVING se usa con JOINs; WHERE con subqueries", "WHERE no funciona con funciones de agregación, HAVING sí lo hace igual"],
-      "correct": 0,
-      "explanation": "WHERE filtra filas individuales (no puedes usar COUNT aquí). HAVING filtra grupos: HAVING COUNT(*) > 5 retorna grupos con más de 5 filas."
-    },
-    {
-      "id": 10,
-      "difficulty": 2,
-      "question": "¿Qué es una clave primaria (PRIMARY KEY) en SQL?",
-      "answers": ["Una columna o conjunto de columnas que identifica únicamente cada fila de la tabla, no admite NULL ni duplicados", "La primera columna de cualquier tabla por convención", "Una clave que referencia otra tabla", "Un índice automático en la primera columna"],
-      "correct": 0,
-      "explanation": "PRIMARY KEY combina NOT NULL + UNIQUE. Cada tabla debe tener máximo una PK. Puede ser compuesta (múltiples columnas)."
-    },
-    {
-      "id": 11,
-      "difficulty": 2,
-      "question": "¿Qué es una FOREIGN KEY en SQL?",
-      "answers": ["Una columna que referencia la PRIMARY KEY de otra tabla, estableciendo una relación entre tablas", "Una clave que solo puede ser vista por usuarios externos", "Una clave de cifrado para datos sensibles", "Un índice en una tabla relacionada"],
-      "correct": 0,
-      "explanation": "FOREIGN KEY garantiza integridad referencial: no puedes insertar un valor en la FK que no exista en la PK de la tabla referenciada."
-    },
-    {
-      "id": 12,
-      "difficulty": 2,
-      "question": "¿Qué hace el operador LIKE en SQL?",
-      "answers": ["Permite búsquedas de patrones en strings usando % (cualquier cadena) y _ (un carácter)", "Compara si dos valores son similares en tipo", "Une dos condiciones WHERE", "Filtra valores similares a una columna de referencia"],
-      "correct": 0,
-      "explanation": "WHERE nombre LIKE 'A%' retorna nombres que empiezan con A. 'A_a' retorna cadenas de 3 caracteres que empiezan con A y terminan en a."
-    },
-    {
-      "id": 13,
-      "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre DELETE, TRUNCATE y DROP?",
-      "answers": ["DELETE elimina filas con WHERE y puede revertirse; TRUNCATE elimina todas las filas sin log; DROP elimina la tabla completa", "Son sinónimos que eliminan tablas completas", "TRUNCATE es más lento que DELETE para pocas filas", "DROP puede usarse con WHERE para eliminar filas específicas"],
-      "correct": 0,
-      "explanation": "DELETE: lento, loggeable, con WHERE. TRUNCATE: rápido, sin WHERE, resetea auto-increment. DROP: elimina la tabla, sus índices y restricciones permanentemente."
-    },
-    {
-      "id": 14,
-      "difficulty": 3,
-      "question": "¿Qué es una subconsulta (subquery) en SQL?",
-      "answers": ["Una consulta SELECT anidada dentro de otra consulta, usada en WHERE, FROM o SELECT", "Una consulta que une dos tablas", "Un procedimiento almacenado con parámetros", "Una consulta que retorna múltiples tablas"],
-      "correct": 0,
-      "explanation": "SELECT * FROM empleados WHERE salario > (SELECT AVG(salario) FROM empleados) – la subquery calcula el promedio y la outer query filtra con ese valor."
-    },
-    {
-      "id": 15,
-      "difficulty": 3,
-      "question": "¿Qué son los índices (INDEX) en SQL y para qué sirven?",
-      "answers": ["Estructuras de datos que aceleran las búsquedas a costa de espacio en disco y tiempo de escritura", "Números de fila asignados automáticamente", "Sinónimos de las claves primarias", "Estructuras para ordenar datos permanentemente en la tabla"],
-      "correct": 0,
-      "explanation": "Un índice en columnas WHERE frecuentes acelera las consultas (O(log n) vs O(n)). Sin embargo, ralentiza INSERT/UPDATE/DELETE porque el índice también se actualiza."
-    },
-    {
-      "id": 16,
-      "difficulty": 3,
-      "question": "¿Qué es una transacción en SQL?",
-      "answers": ["Un conjunto de operaciones que se ejecutan como una unidad atómica: o todas tienen éxito (COMMIT) o todas se revierten (ROLLBACK)", "Una consulta SELECT que tarda más de 1 segundo", "Una conexión a la base de datos", "Un procedimiento almacenado con múltiples parámetros"],
-      "correct": 0,
-      "explanation": "Las transacciones garantizan ACID: Atomicidad, Consistencia, Aislamiento, Durabilidad. BEGIN; UPDATE...; UPDATE...; COMMIT (o ROLLBACK si hay error)."
-    },
-    {
-      "id": 17,
-      "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre UNION y UNION ALL?",
-      "answers": ["UNION elimina duplicados (más lento); UNION ALL incluye todos los duplicados (más rápido)", "UNION ALL elimina duplicados; UNION los mantiene", "Son equivalentes en rendimiento", "UNION ALL solo funciona si ambas consultas tienen el mismo número de filas"],
-      "correct": 0,
-      "explanation": "UNION ejecuta un DISTINCT internamente para eliminar duplicados, lo cual requiere trabajo extra. UNION ALL simplemente concatena los resultados sin deduplicar."
-    },
-    {
-      "id": 18,
-      "difficulty": 4,
-      "question": "¿Qué son las Window Functions (funciones de ventana) en SQL?",
-      "answers": ["Funciones que calculan un valor para cada fila usando un conjunto de filas relacionadas (ventana), sin colapsar el resultado como GROUP BY", "Funciones para acceder a datos de otras ventanas del sistema operativo", "Funciones que solo operan sobre las primeras N filas", "Sinónimos de las funciones de agregación con GROUP BY"],
-      "correct": 0,
-      "explanation": "ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salario DESC) asigna un número de fila por departamento. No elimina filas como GROUP BY."
-    },
-    {
-      "id": 19,
-      "difficulty": 4,
-      "question": "¿Qué es un CTE (Common Table Expression)?",
-      "answers": ["Una consulta nombrada temporal definida con WITH que puede referenciarse en la consulta principal, mejorando legibilidad", "Una tabla creada temporalmente en disco durante una sesión", "Una vista materializada de solo lectura", "Un tipo especial de índice compuesto"],
-      "correct": 0,
-      "explanation": "WITH cte AS (SELECT dept, AVG(sal) avg_sal FROM emp GROUP BY dept) SELECT * FROM emp JOIN cte... Las CTEs pueden ser recursivas para jerarquías."
-    },
-    {
-      "id": 20,
-      "difficulty": 4,
-      "question": "¿Cuál es la diferencia entre una vista (VIEW) y una tabla materializada?",
-      "answers": ["Una VIEW ejecuta la consulta en cada acceso; una tabla materializada guarda el resultado físicamente y se actualiza periódicamente", "Las vistas son más rápidas que las tablas materializadas", "Las tablas materializadas no pueden indexarse", "Son idénticas en todos los motores SQL"],
-      "correct": 0,
-      "explanation": "VIEW: siempre datos frescos, sin almacenamiento extra, puede ser lenta para consultas complejas. Materialized View: datos en caché, muy rápida, pero puede estar desactualizada."
-    },
-    {
-      "id": 21,
-      "difficulty": 4,
-      "question": "¿Qué es la normalización en bases de datos relacionales?",
-      "answers": ["El proceso de organizar tablas para reducir redundancia y dependencias, siguiendo formas normales (1NF, 2NF, 3NF...)", "Convertir valores de texto a números en SQL", "Ajustar los índices para mejorar el rendimiento", "Unificar múltiples bases de datos en una"],
-      "correct": 0,
-      "explanation": "1NF: valores atómicos. 2NF: sin dependencias parciales. 3NF: sin dependencias transitivas. La desnormalización se aplica conscientemente por rendimiento."
-    },
-    {
-      "id": 22,
-      "difficulty": 4,
-      "question": "¿Qué es el EXPLAIN/EXPLAIN ANALYZE en SQL?",
-      "answers": ["Un comando que muestra el plan de ejecución de una consulta, revelando qué índices usa y el costo estimado de cada operación", "Una forma de documentar una consulta SQL", "Un comando para validar la sintaxis SQL", "Un reporte de estadísticas de uso de la base de datos"],
-      "correct": 0,
-      "explanation": "EXPLAIN SELECT... muestra si usa Seq Scan o Index Scan, el costo estimado y las filas esperadas. EXPLAIN ANALYZE lo ejecuta y muestra el tiempo real."
-    },
-    {
-      "id": 23,
       "difficulty": 5,
-      "question": "¿Qué son los niveles de aislamiento de transacciones (READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE)?",
-      "answers": ["Configuraciones que controlan qué datos pueden ver las transacciones concurrentes, balanceando consistencia vs rendimiento", "Permisos de acceso a tablas para distintos usuarios", "Niveles de compresión de datos en el motor SQL", "Tipos de bloqueo aplicados automáticamente a las filas"],
-      "correct": 0,
-      "explanation": "READ UNCOMMITTED: ve datos no commiteados (dirty reads). READ COMMITTED: evita dirty reads. REPEATABLE READ: evita non-repeatable reads. SERIALIZABLE: máximo aislamiento."
-    },
-    {
-      "id": 24,
-      "difficulty": 5,
-      "question": "¿Qué es un deadlock en bases de datos y cómo se previene?",
-      "answers": ["Una situación donde dos transacciones se bloquean mutuamente esperando recursos que la otra posee; se previene con orden consistente de locks o timeouts", "Un error cuando una consulta tarda demasiado", "Un bloqueo permanente de una tabla por un índice corrupto", "Una condición cuando dos usuarios ejecutan la misma consulta simultáneamente"],
-      "correct": 0,
-      "explanation": "T1 bloquea tabla A y espera B; T2 bloquea B y espera A → deadlock. Prevención: adquirir locks siempre en el mismo orden, usar tiempos de espera máximos."
-    },
-    {
-      "id": 25,
-      "difficulty": 5,
-      "question": "¿Qué es el query optimizer en un motor SQL y cómo funciona?",
-      "answers": ["Un componente del motor que analiza múltiples planes de ejecución posibles y elige el más eficiente basándose en estadísticas de la base de datos", "Un plugin externo que reescribe consultas SQL automáticamente", "Una herramienta de monitoreo de rendimiento de consultas", "Un índice especial que acelera cualquier tipo de consulta"],
-      "correct": 0,
-      "explanation": "El optimizer usa estadísticas (cardinalidad, distribución de valores) para estimar costos de distintos planes (qué índice usar, orden de JOINs) y elegir el más barato."
-    }
-  ],
-  "rewards": [
-    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
-    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
-    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
-    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
-    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
-  ]
-}
+      "question": "En las Window Functions, ¿qué diferencia existe entre 'ROWS BETWEEN UNBOUNDED PRECEDING...' y 'RANGE BETWEEN UNBOUNDED PRECEDING...'?",
+      "answers": [
+        "ROWS evalúa
