@@ -6,9 +6,9 @@
       "question": "¿Qué ocurre exactamente al ejecutar una consulta con la cláusula NOT IN si la subconsulta retorna al menos un valor NULL?",
       "answers": [
         "Falla silenciosamente evaluando a UNKNOWN, provocando que la cláusula WHERE filtre absolutamente todos los registros.",
-        "Genera un error de sintaxis en tiempo de compilación debido a que los motores relacionales modernos bajo el estándar ANSI exigen que toda subconsulta con NOT IN incluya un IS NOT NULL explícito.",
-        "Retorna todas las filas de la tabla externa que no coincidan de manera exacta con los valores no nulos, aplicando una regla de exclusión difusa que optimiza el plan de ejecución omitiendo el NULL.",
-        "El optimizador intercepta el valor nulo antes de ejecutar la proyección temporal en memoria y lo convierte automáticamente en un string vacío o cero lógico para evitar un colapso en el Table Scan."
+        "Genera un error de sintaxis en tiempo de compilación debido a que los motores relacionales modernos bajo el estándar ANSI exigen que toda subconsulta con NOT IN incluya un IS NOT NULL explícito en su definición estructural.",
+        "Retorna todas las filas de la tabla externa que no coincidan de manera exacta con los valores no nulos, aplicando una regla de exclusión difusa que optimiza el plan de ejecución omitiendo el NULL asíncronamente.",
+        "El optimizador intercepta el valor nulo antes de ejecutar la proyección temporal en memoria y lo convierte automáticamente en un string vacío o cero lógico para evitar un colapso grave en el Table Scan de la partición."
       ],
       "correct": 0,
       "explanation": "El estándar ANSI SQL dicta que NULL no es igual ni distinto a nada. NOT IN (A, B, NULL) se traduce a: col != A AND col != B AND col != NULL. Como col != NULL siempre evalúa a UNKNOWN, la condición falla para todas las filas."
@@ -18,10 +18,10 @@
       "difficulty": 5,
       "question": "¿Cuál es el impacto en el plan de ejecución y el resultado al usar COUNT(columna) frente a COUNT(*) en una consulta con LEFT JOIN?",
       "answers": [
-        "COUNT(columna) ignora los nulos evaluando registro por registro; COUNT(*) cuenta todas las filas producidas en la proyección.",
-        "No existe diferencia en el resultado final, pero COUNT(columna) obliga al optimizador a realizar un escaneo completo de la tabla, mientras que COUNT(*) aprovecha invariablemente el índice de la clave primaria.",
-        "COUNT(*) genera una anomalía estructural si la tabla derecha carece de registros coincidentes, obligando a implementar subconsultas anidadas complejas para manejar la integridad referencial.",
-        "COUNT(columna) bloquea la tabla durante la ejecución para contar bloqueos sucios, mientras que COUNT(*) opera exclusivamente a nivel de metadatos del diccionario de la base de datos sin afectar la concurrencia."
+        "COUNT(columna) ignora los nulos evaluando por registro; COUNT(*) cuenta todas las filas producidas en la proyección.",
+        "No existe diferencia en el resultado final, pero COUNT(columna) obliga al optimizador a realizar un escaneo completo de la tabla, mientras que COUNT(*) aprovecha invariablemente el índice de la clave primaria para reducir la latencia.",
+        "COUNT(*) genera una anomalía estructural si la tabla derecha carece de registros coincidentes, obligando a implementar subconsultas anidadas complejas para manejar la integridad referencial y evitar lecturas sucias.",
+        "COUNT(columna) bloquea la tabla durante la ejecución para contar bloqueos sucios, mientras que COUNT(*) opera exclusivamente a nivel de metadatos del diccionario de la base de datos sin afectar la concurrencia de transacciones concurrentes."
       ],
       "correct": 0,
       "explanation": "COUNT(*) cuenta filas resultantes, incluyendo las rellenadas con NULLs por la falta de coincidencia en el LEFT JOIN. Para saber cuántos registros hijos existen realmente, se usa COUNT(columna_hija) porque ignora los NULLs."
@@ -31,4 +31,241 @@
       "difficulty": 5,
       "question": "En las Window Functions, ¿qué diferencia existe entre 'ROWS BETWEEN UNBOUNDED PRECEDING...' y 'RANGE BETWEEN UNBOUNDED PRECEDING...'?",
       "answers": [
-        "ROWS evalúa
+        "ROWS evalúa por desplazamiento de posición física; RANGE evalúa lógicamente agrupando filas con valores idénticos.",
+        "RANGE opera a nivel de bloques de disco mejorando exponencialmente el rendimiento de E/S; ROWS procesa la información fila por fila en la memoria volátil, arriesgando un desbordamiento catastrófico en particiones de datos masivas.",
+        "No existe diferencia operativa en motores modernos; RANGE es simplemente una convención heredada de estándares previos a SQL:2003 mantenida estrictamente por retrocompatibilidad con sistemas legacy de mainframes.",
+        "ROWS obliga al motor a aplicar bloqueos exclusivos sobre las filas leídas para evitar lecturas fantasmas repetibles; RANGE flexibiliza el aislamiento transaccional permitiendo lecturas sucias para maximizar la velocidad de cálculo."
+      ],
+      "correct": 0,
+      "explanation": "RANGE procesa filas con valores idénticos (empates en el ORDER BY) como una sola entidad lógica. ROWS evalúa estrictamente por la posición. El valor por defecto al usar ORDER BY es RANGE, lo que causa sumas acumulativas inesperadas en caso de empates."
+    },
+    {
+      "id": 4,
+      "difficulty": 5,
+      "question": "Bajo el nivel de aislamiento REPEATABLE READ, ¿qué fenómeno de concurrencia puede ocurrir y cómo lo previene SERIALIZABLE?",
+      "answers": [
+        "Ocurren Lecturas Fantasmas (Phantom Reads). SERIALIZABLE lo previene aplicando Key-Range Locks.",
+        "Se manifiesta la Lectura Sucia (Dirty Read), accediendo a datos no confirmados. SERIALIZABLE soluciona esto enrutando las transacciones directamente a través del log transaccional de escritura anticipada sin pasar por la memoria RAM.",
+        "Surgen las Lecturas No Repetibles (Non-Repeatable Reads), donde una fila se modifica asíncronamente. SERIALIZABLE evita este fallo aplicando un bloqueo pesimista de registro (Row Lock) profundo durante toda la vida activa de la transacción.",
+        "Aparece el problema de la Pérdida de Actualización (Lost Update) por concurrencia ciega. SERIALIZABLE interviene escalando drásticamente a un bloqueo exclusivo de tabla entera (Table Lock) que paraliza las demás consultas de lectura."
+      ],
+      "correct": 0,
+      "explanation": "REPEATABLE READ garantiza que las filas leídas no cambiarán (retiene bloqueos compartidos), pero no evita que se inserten NUEVAS filas en tu rango de búsqueda. SERIALIZABLE bloquea el rango entero de índices para evitar inserciones fantasmas."
+    },
+    {
+      "id": 5,
+      "difficulty": 5,
+      "question": "¿Qué ocurre por conversión implícita (Implicit Conversion) si en el WHERE comparas una columna indexada VARCHAR con un literal INT?",
+      "answers": [
+        "El motor convierte toda la columna VARCHAR a INT, invalidando el índice y forzando un escaneo completo.",
+        "El motor transforma inteligentemente el literal numérico INT a formato VARCHAR en un paso de pre-compilación nativo, habilitando el uso del índice mediante una operación de búsqueda optimizada (Index Seek) de altísimo rendimiento.",
+        "El analizador semántico interrumpe la consulta arrojando una excepción de discrepancia de tipos (Type Mismatch) estricta para proteger la integridad del plan de ejecución en la memoria caché del gestor de base de datos.",
+        "El optimizador proyecta una vista materializada volátil en la partición temporal TempDB para alojar la conversión de los enteros, uniendo posteriormente ambas estructuras complejas con un algoritmo de Hash Match Join."
+      ],
+      "correct": 0,
+      "explanation": "Por reglas de precedencia, el tipo numérico es superior al texto. El motor no convierte el número a texto; envuelve la columna en una función oculta (ej. CONVERT(INT, columna)). Esto destruye la sargability (capacidad de usar índices)."
+    },
+    {
+      "id": 6,
+      "difficulty": 4,
+      "question": "¿Cuál es la principal ventaja de utilizar un Common Table Expression (CTE) en lugar de una subconsulta derivada tradicional?",
+      "answers": [
+        "Permite recursividad y mejora sustancialmente la legibilidad al definir la estructura lógica antes de la consulta principal.",
+        "Inyecta los resultados temporalmente en el subsistema de memoria NVMe del servidor, garantizando que múltiples sesiones concurrentes puedan acceder al mismo set de datos pre-calculado sin incurrir en bloqueos por lecturas sucias.",
+        "Reemplaza el uso de cursores dinámicos obligando al motor a ejecutar las iteraciones mediante álgebra relacional pura basada en el teorema de grafos acíclicos dirigidos, lo que anula la sobrecarga del planificador de hilos.",
+        "Cifra automáticamente los datos en tránsito desde la capa lógica hasta el cliente, proveyendo un mecanismo de seguridad adicional que las subconsultas derivadas no pueden ofrecer debido a su naturaleza de procesamiento tardío."
+      ],
+      "correct": 0,
+      "explanation": "Los CTE (WITH clause) organizan el código de forma más limpia de arriba hacia abajo y son la única forma estándar en SQL de escribir consultas recursivas (para jerarquías o árboles)."
+    },
+    {
+      "id": 7,
+      "difficulty": 4,
+      "question": "¿Qué consecuencia directa tiene omitir la cláusula ELSE en una sentencia CASE WHEN que no encuentra ninguna coincidencia?",
+      "answers": [
+        "La expresión evaluará a NULL para ese registro específico en el conjunto de resultados.",
+        "El motor de SQL Server aborta la transacción inmediatamente y emite un Severity Level 16, ya que el estándar exige el manejo absoluto de todos los predicados booleanos posibles para prevenir fugas de integridad referencial.",
+        "La consulta omite por completo la fila en la proyección final, actuando de facto como un filtro WHERE oculto que purga los datos no coincidentes antes de enviarlos a la memoria del cliente que originó la petición.",
+        "El valor por defecto del tipo de dato de la columna evaluada (0 para enteros, cadena vacía para texto) se inyecta de forma implícita para garantizar que las funciones de agregación posteriores no colapsen matemáticamente."
+      ],
+      "correct": 0,
+      "explanation": "Si una instrucción CASE no incluye una cláusula ELSE y ninguna de las condiciones WHEN es verdadera, el valor de retorno es automáticamente NULL."
+    },
+    {
+      "id": 8,
+      "difficulty": 4,
+      "question": "¿Para qué escenario técnico se utiliza el operador UNION ALL por sobre el operador UNION estándar?",
+      "answers": [
+        "Para concatenar conjuntos de resultados sin aplicar deduplicación, logrando una ejecución significativamente más rápida.",
+        "Para forzar al motor relacional a fusionar registros que poseen tipos de datos incompatibles, aplicando un casting implícito universal que el UNION tradicional rechazaría en la fase de validación sintáctica del parser.",
+        "Para aplicar un agrupamiento secundario basado en el índice agrupado de la primera tabla, garantizando que el ordenamiento se preserve intrínsecamente sin necesidad de declarar una cláusula ORDER BY al final del script.",
+        "Para interceptar y anular bloqueos compartidos (Shared Locks) heredados de las subconsultas, permitiendo que la lectura concurrente se mantenga ininterrumpida incluso bajo altos niveles de aislamiento transaccional."
+      ],
+      "correct": 0,
+      "explanation": "UNION incluye un paso de ordenamiento/agrupamiento interno para eliminar duplicados (DISTINCT implícito). UNION ALL simplemente añade las filas, evitando ese costoso procesamiento extra."
+    },
+    {
+      "id": 9,
+      "difficulty": 4,
+      "question": "¿Qué representa una clave foránea (FOREIGN KEY) sin índices asociados en una tabla transaccional grande?",
+      "answers": [
+        "Un cuello de botella crítico, ya que las eliminaciones o actualizaciones en la tabla principal forzarán un Table Scan masivo en la tabla hija.",
+        "Una técnica de optimización avanzada de diseño físico, donde el espacio liberado por la ausencia de un árbol B+ permite al gestor de almacenamiento acomodar más páginas de datos en caché, acelerando las lecturas dramáticamente.",
+        "Un requisito normativo de la 3ra Forma Normal (3NF) que prohíbe explícitamente indexar campos referenciales para evitar conflictos asíncronos con el mecanismo de recolección de basura del log de transacciones activo.",
+        "Un error de compilación ineludible, puesto que los motores modernos como PostgreSQL y SQL Server autogeneran un Non-Clustered Index obligatorio tan pronto como se consolida el constraint referencial en el esquema."
+      ],
+      "correct": 0,
+      "explanation": "Si eliminas una fila en la tabla Padre, el motor debe verificar que no queden registros huérfanos en la tabla Hija. Si la Foreign Key en la tabla Hija no tiene índice, el motor tiene que escanear la tabla entera por cada fila eliminada en el Padre."
+    },
+    {
+      "id": 10,
+      "difficulty": 5,
+      "question": "¿Por qué un índice Clustered (agrupado) determina de manera absoluta el rendimiento general de lectura de una tabla?",
+      "answers": [
+        "Porque el índice Clustered dicta el orden físico real en el que las filas enteras de datos se almacenan en las páginas del disco duro.",
+        "Porque actúa como un caché de memoria en el nivel de aplicación, secuestrando la RAM disponible para mantener los metadatos de las columnas más consultadas siempre disponibles para el compilador JIT del motor.",
+        "Porque reescribe la arquitectura de la tabla particionándola automáticamente en micro-segmentos hash distribuidos en el disco de manera aleatoria, imposibilitando el análisis predictivo pero mejorando la inserción masiva.",
+        "Porque sustituye a las claves primarias en la lógica del negocio, forzando a que cualquier consulta que utilice comodines (LIKE) sea analizada mediante algoritmos paralelos independientes de la topología del servidor."
+      ],
+      "correct": 0,
+      "explanation": "A diferencia de los índices no agrupados (que tienen punteros a los datos), el índice agrupado ES los datos. Las hojas del árbol B contienen las filas completas ordenadas físicamente."
+    },
+    {
+      "id": 11,
+      "difficulty": 3,
+      "question": "¿Cuál es la función exacta de la cláusula HAVING en una instrucción SELECT?",
+      "answers": [
+        "Filtrar grupos de resultados exclusivamente después de que la cláusula GROUP BY haya sido procesada.",
+        "Excluir filas individuales antes de que se calcule cualquier tipo de agregación, reemplazando a la cláusula WHERE cuando el volumen de datos excede los límites configurados en el buffer del servidor de base de datos.",
+        "Vincular tablas secundarias dinámicamente basándose en los resultados matemáticos de una función de ventana particionada, alterando el flujo lógico de ejecución estipulado por el estándar ANSI SQL-92.",
+        "Aplicar una regla de formato a la salida final del query, ocultando valores atípicos que no cumplen con los requisitos estéticos de la presentación sin alterar las métricas calculadas en el backend."
+      ],
+      "correct": 0,
+      "explanation": "WHERE filtra filas antes de agrupar. HAVING filtra grupos generados después de aplicar la función de agregación (por ejemplo, mostrar departamentos cuyo promedio de salario es mayor a X)."
+    },
+    {
+      "id": 12,
+      "difficulty": 3,
+      "question": "¿Cuál es la principal diferencia funcional entre DELETE y TRUNCATE?",
+      "answers": [
+        "DELETE registra cada fila eliminada en el log de transacciones y permite WHERE; TRUNCATE libera la página de datos completa sin loguear filas individuales.",
+        "TRUNCATE es un comando DML (Data Manipulation Language) que permite deshacer los cambios mediante un ROLLBACK simple, mientras que DELETE es estructural (DDL) y destruye el esquema asociado a la tabla afectada.",
+        "DELETE solo funciona en tablas temporales ubicadas en memoria volátil; TRUNCATE es el único comando autorizado para purgar tablas transaccionales en esquemas de producción que posean alta disponibilidad configurada.",
+        "Ambos comandos son equivalentes a nivel de rendimiento, pero TRUNCATE exige que el usuario disponga de permisos de administrador global para poder reiniciar los contadores criptográficos de la tabla base."
+      ],
+      "correct": 0,
+      "explanation": "TRUNCATE es mucho más rápido porque es una operación DDL que desasigna las páginas de datos y registra solo esa desasignación en el log, en lugar de borrar fila por fila como DELETE."
+    },
+    {
+      "id": 13,
+      "difficulty": 4,
+      "question": "¿Qué ocurre si utilizas la función COALESCE(val1, val2, val3) recibiendo múltiples parámetros?",
+      "answers": [
+        "Retorna el primer valor de la lista que no evalúe a NULL de izquierda a derecha.",
+        "Suma de forma concatenada todos los valores alfanuméricos provistos, convirtiendo internamente las variables numéricas a formato string para evitar la pérdida de precisión en la representación matricial.",
+        "Compara de manera estadística los parámetros ingresados y retorna la moda (el valor que más se repite), descartando de inmediato cualquier valor NULL presente en la evaluación debido a su naturaleza indeterminada.",
+        "Inicia una transacción autónoma que valida la existencia de los campos en el catálogo del sistema, retornando un error sintáctico si alguno de los valores pertenece a una tabla que se encuentra actualmente bloqueada."
+      ],
+      "correct": 0,
+      "explanation": "COALESCE es la forma ANSI estándar de manejar nulos. Evalúa los argumentos en orden y devuelve el primer argumento que no sea NULL."
+    },
+    {
+      "id": 14,
+      "difficulty": 5,
+      "question": "¿Por qué el uso indiscriminado de SELECT * en aplicaciones de producción es considerado un antipatrón severo de rendimiento?",
+      "answers": [
+        "Obliga al motor a consultar páginas de datos adicionales (Key Lookups), destruyendo la posibilidad de resolver la consulta usando únicamente un índice (Covering Index).",
+        "Genera una sobrecarga matemática en el compilador del motor, el cual debe recalcular recursivamente los metadatos de las restricciones de dominio de cada columna antes de liberar el flujo de bytes hacia la red.",
+        "Provoca que las herramientas de ORM (Object-Relational Mapping) entren en un ciclo de deadlock permanente al no poder mapear dinámicamente las relaciones de herencia polimórfica sin una declaración explícita de campos.",
+        "Inhabilita inmediatamente el sistema de almacenamiento en caché de nivel 2 (L2 Cache) de la base de datos, forzando a que cada petición posterior deba leer físicamente desde los cilindros más lentos del disco mecánico."
+      ],
+      "correct": 0,
+      "explanation": "Si pides columnas que no están en el índice No-Clustered que se está utilizando, el motor tiene que hacer un salto (Lookup) a la tabla física para traer esa columna extra, lo cual multiplica el costo de I/O enormemente."
+    },
+    {
+      "id": 15,
+      "difficulty": 5,
+      "question": "¿Qué describe el concepto de 'Sargability' (Search-Argument-Able) en una cláusula WHERE?",
+      "answers": [
+        "La capacidad del motor de base de datos para utilizar índices de manera eficiente en una condición, la cual se destruye al aplicar funciones sobre la columna.",
+        "Un protocolo de encripción de bajo nivel que verifica si los argumentos de búsqueda coinciden con los patrones de seguridad configurados en los diccionarios de datos asimétricos del gestor principal.",
+        "La propiedad intrínseca de una consulta relacional de ser distribuida en múltiples nodos geográficos de procesamiento paralelo sin perder la coherencia en el modelo de bloqueos optimistas.",
+        "Un algoritmo heurístico de ordenamiento que determina probabilísticamente qué tablas deben ser escaneadas primero en joins complejos basándose exclusivamente en el volumen estimado de tuplas en el disco."
+      ],
+      "correct": 0,
+      "explanation": "Un predicado es 'sargable' si permite que el optimizador use un índice. 'WHERE YEAR(fecha) = 2023' no es sargable porque oculta la columna en una función. 'WHERE fecha >= 20230101' sí lo es."
+    },
+    {
+      "id": 16,
+      "difficulty": 4,
+      "question": "¿Cómo maneja un motor SQL la inserción de un registro en una tabla que cuenta con múltiples índices No-Clustered?",
+      "answers": [
+        "Inserta el dato en la tabla principal y luego debe actualizar, una por una, la estructura de árbol de todos los índices asociados, ralentizando enormemente la escritura.",
+        "Delega las actualizaciones de los índices a un Worker Thread asíncrono, permitiendo que la instrucción de escritura se confirme instantáneamente sin sufrir penalización alguna en los tiempos de respuesta del cliente.",
+        "Inactiva temporalmente los índices menos utilizados basándose en estadísticas históricas para garantizar que la operación DML cumpla con las ventanas de tiempo exigidas por las normativas de alta disponibilidad.",
+        "Compila todos los índices en un único objeto contenedor binario masivo de estructura lineal, reduciendo las operaciones de actualización a un solo bloque secuencial que minimiza la latencia de disco."
+      ],
+      "correct": 0,
+      "explanation": "Esta es la contraparte de los índices: aceleran las lecturas dramáticamente, pero penalizan fuertemente los comandos INSERT, UPDATE y DELETE porque cada índice que cubra el campo modificado debe ser recalculado y reescrito en disco."
+    },
+    {
+      "id": 17,
+      "difficulty": 4,
+      "question": "¿Cuál es la diferencia primordial entre un Stored Procedure y una User-Defined Function (UDF)?",
+      "answers": [
+        "Las UDF deben retornar un valor y pueden ser embebidas en un SELECT o WHERE, mientras que los SPs pueden alterar esquemas y no se pueden invocar dentro de expresiones DML.",
+        "Los SPs se ejecutan exclusivamente en la memoria RAM asignada al subsistema de red, en contraste con las UDF que se interpretan lógicamente en los discos de estado sólido para persistir los cálculos temporales.",
+        "Las funciones están estrictamente limitadas a interactuar con estructuras de datos jerárquicas en formato XML o JSON, delegando las lógicas de procesamiento relacional clásico obligatoriamente a los Procedimientos Almacenados.",
+        "Los Stored Procedures carecen de la capacidad de aceptar parámetros de entrada dinámicos en tiempo de ejecución, obligando al desarrollador a re-compilar la rutina cada vez que cambien las variables del sistema."
+      ],
+      "correct": 0,
+      "explanation": "Las funciones están diseñadas para cálculos determinísticos y ser usadas inline en consultas (SELECT func() FROM tabla). Los SPs son bloques lógicos procedurales para ejecutar secuencias completas de tareas que pueden o no devolver datos."
+    },
+    {
+      "id": 18,
+      "difficulty": 5,
+      "question": "¿Qué problema crítico de arquitectura resuelve la normalización de una base de datos a la Tercera Forma Normal (3NF)?",
+      "answers": [
+        "Elimina redundancias de datos y las Anomalías de Inserción, Actualización y Borrado causadas por dependencias transitivas entre columnas no clave.",
+        "Acelera exponencialmente la velocidad de lectura cruzada al pre-calcular todas las relaciones posibles entre entidades y colapsarlas en una tabla maestra denormalizada que elude los bloqueos de disco.",
+        "Evita el desbordamiento aritmético de las claves primarias numéricas forzando la conversión de los identificadores universales a formato UUID v4 almacenados mediante estructuras de encriptación simétrica.",
+        "Previene que los ataques de inyección SQL afecten a múltiples entidades de negocio, al segregar rigurosamente los tipos de datos primitivos en esquemas virtualizados con políticas de acceso divergentes."
+      ],
+      "correct": 0,
+      "explanation": "La normalización no mejora el rendimiento de lectura (de hecho, requiere más JOINs). Su objetivo es garantizar la integridad del dato: que actualizar un dato se haga en un solo lugar y que eliminar un registro no borre información secundaria no relacionada."
+    },
+    {
+      "id": 19,
+      "difficulty": 3,
+      "question": "¿Para qué sirve exactamente el comando EXPLAIN o EXPLAIN ANALYZE antes de una consulta compleja?",
+      "answers": [
+        "Genera y expone el Plan de Ejecución que el optimizador ha decidido usar, mostrando los escaneos, índices utilizados y costos estimados sin (o ejecutando) la consulta real.",
+        "Inicia una depuración de bajo nivel deteniendo la ejecución línea por línea, habilitando al desarrollador a inspeccionar el valor de las variables locales en cada etapa del pipeline de procesamiento relacional.",
+        "Traduce de manera automática la sintaxis SQL específica del motor subyacente a un lenguaje de metadatos universal comprensible por plataformas analíticas externas de Big Data como Hadoop o Spark.",
+        "Reestructura la jerarquía de la consulta aplicando heurísticas matemáticas avanzadas de Inteligencia Artificial que sobrescriben la instrucción original en el repositorio para acelerar las futuras invocaciones."
+      ],
+      "correct": 0,
+      "explanation": "Es la herramienta fundamental del DBA. Revela cómo la base de datos interpretó tu código y qué ruta física tomará en el hardware para conseguir los datos (Table Scans, Index Seeks, Hash Matches)."
+    },
+    {
+      "id": 20,
+      "difficulty": 5,
+      "question": "En el contexto de Deadlocks (Abrazos Mortales), ¿cuál es el criterio general que utiliza un motor como SQL Server para elegir a la transacción 'Víctima' y matarla?",
+      "answers": [
+        "Elige y aborta automáticamente la transacción cuyo rollback sea el menos costoso de procesar en términos de registros de log y consumo de CPU, liberando así los recursos.",
+        "Termina despiadadamente a la transacción que posea la jerarquía de permisos de usuario más baja en el dominio, garantizando que los procesos de administradores completen sus ciclos independientemente del impacto estructural.",
+        "Asesina invariablemente al proceso más antiguo que se encuentre residente en la memoria caché, asumiendo que los hilos longevos padecen invariablemente de fugas de memoria inherentes a su propia latencia acumulada.",
+        "Analiza el índice de fragmentación de las tablas involucradas y sacrifica la transacción que intenta acceder a las páginas de datos con mayor entropía magnética, salvaguardando la salud física de la unidad de almacenamiento."
+      ],
+      "correct": 0,
+      "explanation": "Cuando T1 espera por T2, y T2 espera por T1, el motor debe romper el ciclo. Internamente, evalúa el costo transaccional (qué tan difícil es revertir lo que ya hizo T1 vs T2) y mata al 'más barato', deshaciendo su trabajo."
+    }
+  ],
+  "rewards": [
+    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
+    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
+    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
+    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
+    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
+  ]
+}
