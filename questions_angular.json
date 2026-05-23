@@ -3,202 +3,202 @@
     {
       "id": 1,
       "difficulty": 1,
-      "question": "¿Qué comando se usa para crear un nuevo proyecto Angular con la CLI?",
-      "answers": ["ng start proyecto", "angular create app", "ng new mi-proyecto --template", "ng n mi-proyecto"],
+      "question": "¿Qué comando se usa para crear un nuevo proyecto Angular?",
+      "answers": ["ng make app", "angular start", "ng new", "npm init"],
       "correct": 2,
-      "explanation": "'ng new' es el comando correcto. --template no es un flag real."
+      "explanation": "'ng new' es el comando oficial de Angular CLI."
     },
     {
       "id": 2,
       "difficulty": 1,
-      "question": "¿Qué decorador marca una clase como componente en Angular?",
-      "answers": ["@Componente", "@Directive(component: true)", "@ViewComponent", "@Component"],
+      "question": "¿Cómo se declara un componente en Angular?",
+      "answers": ["@Directive", "@Componente", "@View", "@Component"],
       "correct": 3,
-      "explanation": "@Component es el decorador correcto. Los otros no existen o son incorrectos."
+      "explanation": "El decorador @Component es el que usa Angular."
     },
     {
       "id": 3,
       "difficulty": 1,
-      "question": "¿Qué símbolo se usa para la interpolación de datos en una plantilla Angular?",
-      "answers": ["${ }", "[[ ]]", "{ }", "{{ }}"],
-      "correct": 3,
-      "explanation": "Las dobles llaves {{ }} son la sintaxis correcta. ${ } es de template literals de JS."
+      "question": "¿Qué sintaxis muestra datos del componente en la vista?",
+      "answers": ["(click)", "[disabled]", "{{ }}", "#nombre"],
+      "correct": 2,
+      "explanation": "Las dobles llaves {{ }} interpolan valores."
     },
     {
       "id": 4,
       "difficulty": 1,
-      "question": "¿Para qué sirve ngIf en Angular?",
-      "answers": ["Muestra u oculta un elemento con CSS display:none", "Elimina o agrega el elemento del DOM según condición", "Ambas anteriores son correctas", "Ninguna anterior es correcta"],
+      "question": "¿Qué hace *ngIf exactamente en el DOM?",
+      "answers": ["Lo oculta con CSS", "Lo elimina o agrega", "Lo deshabilita", "Lo clona"],
       "correct": 1,
-      "explanation": "ngIf elimina/agrega del DOM, no solo oculta con CSS. La trampa es que mucha gente cree que ambas son correctas."
+      "explanation": "*ngIf destruye y recrea el elemento en el DOM."
     },
     {
       "id": 5,
       "difficulty": 1,
-      "question": "¿Qué directiva se usa para iterar sobre una lista en Angular?",
-      "answers": ["ng-repeat", "*ngFor", "ngFor", "*ngForOf"],
+      "question": "¿Qué directiva repite elementos en Angular?",
+      "answers": ["*ngSwitch", "*ngFor", "*ngIf", "*ngTemplate"],
       "correct": 1,
-      "explanation": "La sintaxis correcta es *ngFor. ngFor sin asterisco no funciona. ng-repeat es de AngularJS."
+      "explanation": "*ngFor itera sobre colecciones en la plantilla."
     },
     {
       "id": 6,
       "difficulty": 1,
-      "question": "¿Qué es un módulo en Angular (@NgModule)?",
-      "answers": ["Un contenedor de componentes sin servicios", "Solo se usa para lazy loading", "Una forma de agrupar componentes, directivas y servicios", "Un reemplazo de los componentes"],
-      "correct": 2,
-      "explanation": "Los módulos agrupan componentes, directivas, servicios y pipes. La trampa: sí pueden tener servicios."
+      "question": "¿Cuál es el rol de @NgModule en Angular?",
+      "answers": ["Define un componente", "Agrupa funcionalidad", "Crea un servicio", "Maneja rutas"],
+      "correct": 1,
+      "explanation": "Los módulos organizan componentes, directivas y servicios."
     },
     {
       "id": 7,
       "difficulty": 2,
-      "question": "¿Qué es la inyección de dependencias en Angular?",
-      "answers": ["Un patrón donde el componente crea sus propias dependencias", "Una forma de importar módulos globales", "Un sistema donde Angular provee instancias automáticamente al constructor", "Solo funciona para servicios con providedIn: 'root'"],
+      "question": "¿Qué hace la inyección de dependencias?",
+      "answers": ["Crea instancias manuales", "Pasa datos entre rutas", "Entrega servicios al constructor", "Importa módulos externos"],
       "correct": 2,
-      "explanation": "DI inyecta dependencias automáticamente. No requiere que el componente las cree."
+      "explanation": "Angular DI resuelve e inyecta dependencias automáticamente."
     },
     {
       "id": 8,
       "difficulty": 2,
-      "question": "¿Cuál es la diferencia entre property binding [prop] y event binding (event)?",
-      "answers": ["Ambos envían datos en ambas direcciones", "[prop] es solo para atributos HTML nativos", "(event) solo sirve para clicks", "[prop] va del componente a la vista, (event) de la vista al componente"],
-      "correct": 3,
-      "explanation": "Property binding es unidireccional hacia la vista, event binding captura eventos de la vista."
+      "question": "Diferencia entre [src] y (click)",
+      "answers": ["Uno enlaza datos, otro eventos", "Ambos enlazan eventos", "Uno es para formularios", "Ambos son iguales"],
+      "correct": 0,
+      "explanation": "[ ] es property binding, ( ) es event binding."
     },
     {
       "id": 9,
       "difficulty": 2,
-      "question": "¿Qué es el two-way data binding en Angular y cómo se escribe?",
-      "answers": ["[ngModel]", "(ngModel)", "[(ngModel)]", "{{ ngModel }}"],
-      "correct": 2,
-      "explanation": "El banana in a box [(ngModel)] es la sintaxis correcta. (ngModel) solo es event binding."
+      "question": "¿Cómo se escribe two-way binding en Angular?",
+      "answers": ["[ngModel]", "[(value)]", "{(ngModel)}", "[(ngModel)]"],
+      "correct": 3,
+      "explanation": "La sintaxis banana in a box es [(ngModel)]."
     },
     {
       "id": 10,
       "difficulty": 2,
-      "question": "¿Para qué se usa @Input() en Angular?",
-      "answers": ["Para enviar datos del hijo al padre", "Para recibir datos del padre al hijo", "Para comunicarse entre hermanos", "Para inyectar servicios"],
+      "question": "¿Para qué sirve @Input()?",
+      "answers": ["Enviar evento al padre", "Recibir dato del padre", "Inyectar un servicio", "Definir una ruta"],
       "correct": 1,
-      "explanation": "@Input() recibe datos desde el padre. @Output() envía del hijo al padre."
+      "explanation": "@Input() permite pasar datos de padre a hijo."
     },
     {
       "id": 11,
       "difficulty": 2,
-      "question": "¿Qué hace el Router de Angular?",
-      "answers": ["Cambia la URL sin recargar la página", "Recarga la página completa en cada navegación", "Solo funciona con módulos lazy", "Requiere necesariamente guards para funcionar"],
+      "question": "¿Qué hace el router de Angular?",
+      "answers": ["Cambia la URL sin recargar", "Recarga toda la app", "Solo funciona en producción", "Requiere jQuery"],
       "correct": 0,
-      "explanation": "El router permite navegación SPA sin recargar. Los guards son opcionales."
+      "explanation": "El router permite navegación SPA sin recargar."
     },
     {
       "id": 12,
       "difficulty": 2,
       "question": "¿Qué es un pipe en Angular?",
-      "answers": ["Solo transforma fechas y números", "Una función que transforma datos en templates con |", "Un método del componente", "Un tipo especial de directiva estructural"],
+      "answers": ["Filtra listas", "Formatea datos", "Maneja errores", "Conecta APIs"],
       "correct": 1,
-      "explanation": "Los pipes transforman datos en templates. No se limitan a fechas/números."
+      "explanation": "Los pipes transforman datos en las plantillas."
     },
     {
       "id": 13,
       "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre Observable y Promise?",
-      "answers": ["Promise puede emitir múltiples valores", "Observable siempre es asíncrono como Promise", "Observable puede cancelarse y emitir múltiples valores; Promise no", "Son exactamente iguales en RxJS"],
-      "correct": 2,
-      "explanation": "Los Observables pueden cancelarse con unsubscribe y emiten múltiples valores. Las promesas no."
+      "question": "¿Qué ventaja tiene Observable sobre Promise?",
+      "answers": ["Es más rápido", "Se puede cancelar", "Usa menos memoria", "Es síncrono"],
+      "correct": 1,
+      "explanation": "Observables soportan cancelación con unsubscribe."
     },
     {
       "id": 14,
       "difficulty": 3,
-      "question": "¿Qué es Change Detection en Angular?",
-      "answers": ["Solo detecta cambios en @Input()", "Actualiza la vista automáticamente al cambiar el estado", "Requiere manualmente llamar detectChanges() siempre", "Solo funciona con OnPush strategy"],
-      "correct": 1,
-      "explanation": "Change Detection actualiza la vista automáticamente. detectChanges() es para casos específicos."
+      "question": "¿Qué hace Change Detection en Angular?",
+      "answers": ["Compila la app", "Optimiza imágenes", "Actualiza la vista", "Minifica el código"],
+      "correct": 2,
+      "explanation": "Change Detection sincroniza modelo con la vista."
     },
     {
       "id": 15,
       "difficulty": 3,
-      "question": "¿Qué operador RxJS se usa para cancelar una petición HTTP anterior si llega una nueva?",
-      "answers": ["mergeMap", "concatMap", "switchMap", "exhaustMap"],
-      "correct": 2,
-      "explanation": "switchMap cancela la suscripción anterior. exhaustMap ignora las nuevas hasta que termine la actual."
+      "question": "¿Qué operador RxJS cancela la petición anterior?",
+      "answers": ["mergeMap", "switchMap", "concatMap", "delayMap"],
+      "correct": 1,
+      "explanation": "switchMap cancela la suscripción activa previa."
     },
     {
       "id": 16,
       "difficulty": 3,
-      "question": "¿Qué es un Guard en Angular Router?",
-      "answers": ["Un interceptor HTTP", "Un servicio que protege rutas", "Un pipe asíncrono", "Un componente especial de rutas"],
+      "question": "¿Para qué sirve un Guard en rutas?",
+      "answers": ["Cachear datos", "Proteger acceso", "Loggear errores", "Renderizar PDF"],
       "correct": 1,
-      "explanation": "Los guards (canActivate, canLoad, etc.) son servicios que controlan acceso a rutas."
+      "explanation": "Los Guards controlan si se activa una ruta."
     },
     {
       "id": 17,
       "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre Reactive Forms y Template-driven Forms?",
-      "answers": ["Reactive Forms usa ngModel, Template-driven usa FormGroup", "Template-driven es más potente para validaciones", "Reactive Forms define la lógica en TypeScript; Template-driven en HTML", "Son iguales con diferente sintaxis"],
-      "correct": 2,
-      "explanation": "Reactive Forms: FormGroup/FormControl en TS. Template-driven: directivas ngModel en HTML."
+      "question": "Diferencia entre Reactive y Template-driven forms",
+      "answers": ["Uno es más viejo", "Uno usa TS, otro HTML", "Uno es más rápido", "Son idénticos"],
+      "correct": 1,
+      "explanation": "Reactive forms definen lógica en TS, Template-driven en HTML."
     },
     {
       "id": 18,
       "difficulty": 4,
-      "question": "¿Qué es el lazy loading en Angular?",
-      "answers": ["Cargar imágenes solo cuando entran al viewport", "Dividir la app en módulos que se cargan bajo demanda", "Retrasar la ejecución de servicios", "Cargar componentes solo cuando se usan"],
+      "question": "¿Qué es lazy loading en Angular?",
+      "answers": ["Cargar imágenes diferido", "Cargar módulos bajo demanda", "Retrasar servicios", "Optimizar CSS"],
       "correct": 1,
-      "explanation": "Lazy loading de módulos con loadChildren. La trampa de imágenes es un concepto diferente."
+      "explanation": "Lazy loading carga módulos solo cuando se necesitan."
     },
     {
       "id": 19,
       "difficulty": 4,
-      "question": "¿Qué es un Interceptor HTTP en Angular?",
-      "answers": ["Un pipe para transformar respuestas", "Un middleware para peticiones/respuestas HTTP", "Un servicio que detiene peticiones maliciosas", "Un guard de rutas HTTP"],
+      "question": "¿Qué hace un Interceptor HTTP?",
+      "answers": ["Formatea JSON", "Intercepta peticiones", "Crea rutas", "Valida emails"],
       "correct": 1,
-      "explanation": "Los interceptores actúan como middleware en el flujo HTTP (request/response)."
+      "explanation": "Los interceptores modifican peticiones/respuestas HTTP."
     },
     {
       "id": 20,
       "difficulty": 4,
-      "question": "¿Qué es NgZone y cuándo se usa fuera de Angular?",
-      "answers": ["Una zona de memoria especial", "Un servicio que ejecuta código fuera de Angular sin trigger CD", "Solo se usa para testing", "Para ejecutar código en Web Workers"],
+      "question": "¿Qué es NgZone y para qué sirve?",
+      "answers": ["Maneja memoria", "Ejecuta código fuera de Angular", "Optimiza bucles", "Convierte datos"],
       "correct": 1,
-      "explanation": "NgZone.runOutsideAngular() ejecuta código sin activar Change Detection."
+      "explanation": "NgZone.runOutsideAngular() evita trigger de Change Detection."
     },
     {
       "id": 21,
       "difficulty": 4,
-      "question": "¿Qué diferencia hay entre ViewChild y ContentChild?",
-      "answers": ["ViewChild ve dentro del template, ContentChild ve contenido proyectado", "ContentChild solo funciona con ng-content", "Ambos ven lo mismo pero con diferente timing", "ViewChild no funciona con elementos HTML nativos"],
+      "question": "Diferencia entre ViewChild y ContentChild",
+      "answers": ["Uno ve el template, otro contenido proyectado", "Uno es síncrono, otro no", "Son iguales", "Uno solo para inputs"],
       "correct": 0,
-      "explanation": "ViewChild accede al template del componente. ContentChild accede al contenido proyectado desde el padre."
+      "explanation": "ViewChild accede al template local, ContentChild al proyectado."
     },
     {
       "id": 22,
       "difficulty": 4,
-      "question": "¿Qué es la estrategia OnPush de Change Detection?",
-      "answers": ["Mejora el rendimiento revisando solo cuando @Inputs cambian por referencia", "Nunca revisa los cambios", "Revisa siempre pero más rápido", "Solo funciona con Observables y no con @Input"],
-      "correct": 0,
-      "explanation": "OnPush solo verifica cambios cuando cambia la referencia de @Input o se emite un evento."
+      "question": "¿Qué hace OnPush en Change Detection?",
+      "answers": ["Desactiva CD", "Optimiza con referencias", "Fuerza CD cada 5s", "Solo para móviles"],
+      "correct": 1,
+      "explanation": "OnPush solo corre CD si cambia referencia de @Input."
     },
     {
       "id": 23,
       "difficulty": 5,
-      "question": "¿Qué son los Signals en Angular (v16+)?",
-      "answers": ["Un reemplazo completo de RxJS", "Un sistema de reactividad con tracking automático de dependencias", "Una forma optimizada de @Input", "Solo para estados globales"],
+      "question": "¿Qué son los Signals en Angular 16+?",
+      "answers": ["Nuevo compilador", "Reactividad granular", "Sistema de rutas", "Librería HTTP"],
       "correct": 1,
-      "explanation": "Los signals trackean automáticamente dependencias. No reemplazan completamente RxJS."
+      "explanation": "Signals trackean dependencias y optimizan CD."
     },
     {
       "id": 24,
       "difficulty": 5,
-      "question": "¿Qué es el Tree Shaking y cómo lo aprovecha Angular?",
-      "answers": ["Técnica para eliminar CSS no usado", "Elimina código no utilizado del bundle final usando import/export estáticos", "Optimiza el árbol de componentes en runtime", "Reorganiza los imports automáticamente"],
+      "question": "¿Qué es Tree Shaking?",
+      "answers": ["Animación CSS", "Eliminar código muerto", "Mover archivos", "Comprimir imágenes"],
       "correct": 1,
-      "explanation": "Tree shaking elimina código muerto en tiempo de build. Se basa en módulos ES estáticos."
+      "explanation": "Tree shaking elimina código no utilizado en el bundle."
     },
     {
       "id": 25,
       "difficulty": 5,
-      "question": "¿Cuál es la diferencia entre Ivy y View Engine en Angular?",
-      "answers": ["Ivy es más rápido y genera bundles más pequeños", "View Engine es el nuevo compilador", "No hay diferencia relevante", "Ivy solo está en Angular 15+"],
+      "question": "Diferencia entre Ivy y View Engine",
+      "answers": ["Ivy es más moderno", "View Engine es más rápido", "Son iguales", "Ivy es para testing"],
       "correct": 0,
-      "explanation": "Ivy (Angular 9+) genera bundles más pequeños y compilación incremental. View Engine es el anterior."
+      "explanation": "Ivy (Angular 9+) mejora rendimiento y tamaño de bundles."
     }
   ],
   "rewards": [
