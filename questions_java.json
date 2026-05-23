@@ -46,4 +46,226 @@
       "answers": [
         "El modelo de delegación prioriza al padre; el hijo nunca carga la clase, retornando siempre la instancia ya existente en el padre.",
         "La JVM crea una nueva copia de la clase en memoria para asegurar el aislamiento, permitiendo tener dos versiones idénticas cargadas simultáneamente bajo diferentes nombres.",
-        "Se genera una excepción 'LinkageError: Duplicate Class Definition' que bloque
+        "Se genera una excepción 'LinkageError: Duplicate Class Definition' que bloquea el inicio de la aplicación y requiere reiniciar el contexto de la JVM.",
+        "El sistema desasigna la clase del padre y la reasigna al Classloader hijo, provocando una inestabilidad grave en la gestión de permisos del Security Manager."
+      ],
+      "correct": 0,
+      "explanation": "El modelo de delegación es jerárquico. Si el padre puede cargar la clase, lo hace. Esto evita conflictos y garantiza que la clase cargada sea siempre la misma."
+    },
+    {
+      "id": 5,
+      "difficulty": 5,
+      "question": "¿Qué ventaja técnica ofrece el uso de un 'WeakReference' en la gestión de caché de objetos grandes?",
+      "answers": [
+        "Permite que el objeto sea recolectado por el Garbage Collector en cuanto el sistema necesita memoria, aunque aún existan referencias débiles a él.",
+        "Fuerza al objeto a mantenerse en la memoria RAM incluso ante un 'OutOfMemoryError', garantizando que nunca se pierdan datos críticos del estado actual del sistema.",
+        "Crea un puente de comunicación directa con el Kernel de Linux para delegar la gestión del objeto a la memoria SWAP de manera transparente y eficiente.",
+        "Transforma automáticamente el objeto en un archivo temporal persistente en el disco duro, liberando la RAM para otros procesos del servidor de aplicaciones."
+      ],
+      "correct": 0,
+      "explanation": "Una WeakReference no impide que el GC elimine el objeto. Es ideal para caches: si hay memoria, el objeto está ahí; si el GC necesita memoria, el objeto desaparece."
+    },
+    {
+      "id": 6,
+      "difficulty": 4,
+      "question": "¿Cómo funciona el mecanismo de 'Try-with-resources' introducido en Java 7?",
+      "answers": [
+        "Cierra automáticamente cualquier recurso que implemente la interfaz AutoCloseable al finalizar el bloque, sin necesidad de un bloque 'finally' explícito.",
+        "Utiliza una inyección de dependencias para abrir los archivos, delegando la gestión de los descriptores de archivos a un contenedor externo gestionado por Spring.",
+        "Comprime el consumo de memoria del objeto a niveles mínimos antes de procesarlo, previniendo errores de desbordamiento en operaciones de lectura masiva.",
+        "Convierte las excepciones checked en unchecked internamente, permitiendo omitir el bloque catch cuando se trabaja con recursos de red o base de datos."
+      ],
+      "correct": 0,
+      "explanation": "Antes, los bloques 'finally' eran propensos a errores (ej. el close() lanzaba otra excepción). Try-with-resources asegura el cierre correcto y gestiona las excepciones suprimidas."
+    },
+    {
+      "id": 7,
+      "difficulty": 4,
+      "question": "¿Qué es la 'Type Erasure' en Java y por qué afecta a los Generics?",
+      "answers": [
+        "La eliminación de la información de tipo de los Generics en tiempo de compilación, reemplazándolos con Object o el bound definido.",
+        "Una técnica de borrado de memoria para limpiar los objetos definidos como <T> después de que el método finaliza su ejecución, ahorrando RAM.",
+        "El proceso de convertir tipos primitivos a objetos wrapper (autoboxing) de manera forzada para mantener compatibilidad con versiones anteriores del lenguaje.",
+        "La imposibilidad de invocar métodos de la interfaz definida en el Generico una vez que el objeto ha sido instanciado por la JVM en tiempo de ejecución."
+      ],
+      "correct": 0,
+      "explanation": "Java eliminó los tipos genericos después de compilar para asegurar la compatibilidad con Java 1.4. Por eso `List<String>` y `List<Integer>` son, al final, `List` en tiempo de ejecución."
+    },
+    {
+      "id": 8,
+      "difficulty": 5,
+      "question": "¿Por qué es un error redefinir el método 'equals()' sin redefinir también 'hashCode()'?",
+      "answers": [
+        "Porque colecciones basadas en Hash (como HashMap o HashSet) romperán su contrato, siendo incapaces de localizar objetos que deberían ser considerados iguales.",
+        "Porque la JVM arrojará un error de compilación al detectar inconsistencias en la sobreescritura de los métodos base de la clase Object.",
+        "Debido a que el rendimiento de búsqueda en colecciones lineales se degrada a O(n^2), haciendo que la aplicación sea inutilizable con pocos elementos.",
+        "Porque el Garbage Collector no podrá liberar el objeto si la inconsistencia entre equals y hashCode provoca ciclos de referencia en el heap."
+      ],
+      "correct": 0,
+      "explanation": "El contrato dice: si dos objetos son iguales según equals(), deben tener el mismo hashCode(). Si no, el HashMap no podrá encontrar el objeto porque buscará en el bucket incorrecto."
+    },
+    {
+      "id": 9,
+      "difficulty": 4,
+      "question": "¿Qué diferencia existe entre 'Serializable' y 'Externalizable'?",
+      "answers": [
+        "Serializable usa reflexión automática (lento); Externalizable requiere implementar métodos manuales para escribir/leer los campos (más rápido y controlado).",
+        "Serializable es para objetos de red; Externalizable es exclusivamente para objetos guardados en bases de datos relacionales mediante JPA.",
+        "Externalizable requiere que todos los campos sean 'transient', mientras que Serializable permite cualquier tipo de dato en la clase.",
+        "No hay diferencia; Externalizable es un alias de Serializable mantenido por razones históricas desde las primeras versiones del JDK."
+      ],
+      "correct": 0,
+      "explanation": "Serializable es 'automático' y fácil pero lento y con menos control. Externalizable te obliga a escribir el código de serialización manualmente, lo cual es mucho más eficiente."
+    },
+    {
+      "id": 10,
+      "difficulty": 5,
+      "question": "¿Qué es un 'Deadlock' y cuál es la causa más común en Java?",
+      "answers": [
+        "Un estado donde dos hilos esperan indefinidamente el bloqueo (monitor) que posee el otro. Causado por una adquisición inconsistente de candados.",
+        "Un error de segmentación causado por intentar acceder a la memoria nativa desde el código Java sin utilizar la interfaz JNI (Java Native Interface).",
+        "La saturación del Heap tras la creación masiva de objetos inmutables, lo que impide que el hilo principal ejecute el recolector de basura.",
+        "Una condición de carrera provocada por usar la palabra clave 'synchronized' sobre variables primitivas en lugar de sobre objetos de referencia."
+      ],
+      "correct": 0,
+      "explanation": "Ocurre cuando el hilo A bloquea X y espera Y, mientras el hilo B bloquea Y y espera X. Ninguno avanzará nunca. Se previene adquiriendo locks siempre en el mismo orden."
+    },
+    {
+      "id": 11,
+      "difficulty": 3,
+      "question": "¿Qué función cumple el 'JIT Compiler' (Just-In-Time) dentro de la JVM?",
+      "answers": [
+        "Compila el bytecode en código máquina nativo durante la ejecución para mejorar el rendimiento de las partes calientes (frecuentes) del código.",
+        "Analiza el código en busca de posibles vulnerabilidades de seguridad antes de que la aplicación termine de cargar los archivos JAR en memoria.",
+        "Es un depurador que se conecta a la aplicación en tiempo real para permitir la inspección de variables mientras el código sigue corriendo en el servidor.",
+        "Optimiza el uso de hilos distribuyendo automáticamente la carga de trabajo entre todos los núcleos disponibles del procesador en tiempo de compilación."
+      ],
+      "correct": 0,
+      "explanation": "Java no es puramente interpretado. El JIT detecta métodos que se ejecutan muchas veces y los traduce a código máquina real (C++) para que se ejecuten a velocidad nativa."
+    },
+    {
+      "id": 12,
+      "difficulty": 4,
+      "question": "¿Cuál es la diferencia entre 'final', 'finally' y 'finalize'?",
+      "answers": [
+        "final es para constantes/inmutabilidad; finally es para bloques de cierre; finalize es un método de limpieza previo a que el GC borre el objeto.",
+        "final es para métodos; finally es para el ciclo de vida del objeto; finalize es una palabra reservada del compilador para manejo de hilos.",
+        "Son solo variaciones de sintaxis para diferentes tipos de manejo de errores, sin una diferencia conceptual clara en la arquitectura moderna de Java.",
+        "finally es la clase base para manejo de excepciones; final es un decorador de métodos; finalize es una palabra clave deprecada para uso exclusivo del sistema operativo."
+      ],
+      "correct": 0,
+      "explanation": "final = inmutable/no heredable. finally = se ejecuta sí o sí después de un try-catch. finalize = destructor (deprecated) llamado por el GC."
+    },
+    {
+      "id": 13,
+      "difficulty": 4,
+      "question": "¿Qué es el 'Boxing' y 'Unboxing' en Java?",
+      "answers": [
+        "Conversión automática entre tipos primitivos (int, double) y sus clases envolventes (Integer, Double).",
+        "Proceso de empaquetar objetos dentro de contenedores de seguridad para evitar que sean modificados por métodos externos no autorizados.",
+        "Técnica de organización de la memoria en la que los objetos pequeños se colocan juntos para evitar la fragmentación del heap.",
+        "Sintaxis especial para manejar excepciones de entrada/salida cuando se trabaja con flujos de archivos de gran tamaño."
+      ],
+      "correct": 0,
+      "explanation": "Java necesita objetos para usar colecciones (List<Integer>). Cuando usas un int simple en una lista, Java hace boxing automáticamente (new Integer(i))."
+    },
+    {
+      "id": 14,
+      "difficulty": 5,
+      "question": "¿Qué diferencia existe entre un 'Interface' y una 'Abstract Class' a partir de Java 8+?",
+      "answers": [
+        "Las interfaces pueden tener métodos 'default' y 'static' con implementación, permitiendo herencia múltiple de comportamiento; las clases abstractas mantienen estado.",
+        "No existe diferencia real; las interfaces fueron deprecadas en favor de las clases abstractas para simplificar el modelo de herencia del lenguaje.",
+        "Las interfaces ahora permiten definir variables de instancia protegidas (protected) igual que las clases abstractas para facilitar la inyección de dependencias.",
+        "Las clases abstractas se compilan más rápido porque son parte del core del lenguaje, mientras que las interfaces son interpretadas en tiempo de ejecución."
+      ],
+      "correct": 0,
+      "explanation": "Antes, las interfaces eran solo contratos. Ahora, con métodos default, son herramientas de diseño mucho más potentes. Pero la clase abstracta sigue siendo la única que puede tener 'estado' (campos privados no constantes)."
+    },
+    {
+      "id": 15,
+      "difficulty": 5,
+      "question": "¿Para qué sirve el patrón 'Singleton' y cuál es su implementación más segura frente a concurrencia?",
+      "answers": [
+        "Garantiza que una clase tenga una sola instancia. Implementación segura: usar un 'Enum' (instancia única garantizada por la JVM).",
+        "Permite herencia múltiple de comportamiento. Implementación segura: usar un Singleton con 'synchronized' en el método constructor.",
+        "Crea un objeto global para toda la aplicación. Implementación segura: usar una variable estática sin modificadores para facilitar la accesibilidad.",
+        "Delegar la creación de objetos a una fábrica. Implementación segura: instanciar el objeto en el método main y pasarlo por parámetro a toda la app."
+      ],
+      "correct": 0,
+      "explanation": "Enum es la mejor forma porque la JVM garantiza que solo se instancie una vez, manejando la serialización y la concurrencia de forma nativa sin código extra."
+    },
+    {
+      "id": 16,
+      "difficulty": 4,
+      "question": "¿Qué es la 'Java Memory Model' (JMM) respecto a la concurrencia?",
+      "answers": [
+        "Un conjunto de reglas que definen cómo los hilos interactúan a través de la memoria principal y el cache local de los procesadores.",
+        "Un gráfico que muestra cuánta RAM consume cada objeto creado en el programa durante un periodo de tiempo determinado.",
+        "La interfaz de programación que permite acceder a las funciones del sistema operativo de forma directa para gestionar la paginación de memoria.",
+        "La librería de clases que facilita la creación de pools de hilos para ejecutar tareas pesadas de forma distribuida en un entorno cliente-servidor."
+      ],
+      "correct": 0,
+      "explanation": "JMM define la relación entre los hilos y la memoria (volatile, synchronized, happen-before). Sin esto, no podrías confiar en que una variable escrita por un hilo sea vista por otro."
+    },
+    {
+      "id": 17,
+      "difficulty": 5,
+      "question": "¿Qué es una 'Lambda Expression' en Java y cuál es su relación con las 'Functional Interfaces'?",
+      "answers": [
+        "Es una sintaxis para implementar funciones anónimas. Una Lambda solo puede usarse donde el tipo esperado es una interfaz con un único método abstracto.",
+        "Es un reemplazo total de los métodos de clase; ahora todo el código en Java debe escribirse dentro de expresiones Lambda para ser compilado.",
+        "Es una herramienta para convertir bucles 'for' en estructuras de datos paralelas sin necesidad de usar el API de Streams.",
+        "Es un tipo de objeto que no necesita memoria y se ejecuta directamente en la caché L1 del procesador para maximizar la velocidad."
+      ],
+      "correct": 0,
+      "explanation": "Java 8 introdujo funciones como ciudadanos de primera clase. Una 'Functional Interface' (como Runnable o Comparator) es el destino obligatorio para la Lambda."
+    },
+    {
+      "id": 18,
+      "difficulty": 5,
+      "question": "¿Cómo funciona el API de 'Streams' en Java y qué es el 'Lazy Evaluation'?",
+      "answers": [
+        "Las operaciones intermedias (map, filter) no se ejecutan hasta que una operación terminal (collect, count) es invocada; esto optimiza el recorrido de datos.",
+        "Los Streams ejecutan todo el código de una sola vez al declarar la variable, creando copias temporales de los datos para evitar fallos de concurrencia.",
+        "Los Streams convierten automáticamente todas las listas de datos en bases de datos SQL relacionales para permitir búsquedas más rápidas mediante índices.",
+        "Lazy Evaluation significa que el Stream espera a que el usuario presione un botón en la interfaz para empezar a procesar la información en tiempo real."
+      ],
+      "correct": 0,
+      "explanation": "Los streams no procesan datos hasta que les pides el resultado final. Esto permite al motor combinar operaciones (p. ej. filtrar y mapear en una sola pasada sobre el dato) para ahorrar ciclos."
+    },
+    {
+      "id": 19,
+      "difficulty": 4,
+      "question": "¿Qué es un 'Annotation' en Java y cómo se procesa?",
+      "answers": [
+        "Metadatos asociados al código que pueden ser leídos mediante reflexión en tiempo de ejecución o procesadores de anotaciones en compilación.",
+        "Una etiqueta especial que el compilador usa para eliminar métodos innecesarios del bytecode final, reduciendo el tamaño del archivo .class.",
+        "Un comentario avanzado que permite al IDE mostrar sugerencias de código mejoradas durante el desarrollo, pero que es ignorado por la JVM.",
+        "Un tipo de variable especial que se guarda en un archivo de configuración externo (XML) para evitar cambiar el código fuente al cambiar parámetros."
+      ],
+      "correct": 0,
+      "explanation": "Desde @Override hasta las anotaciones de Spring, permiten programar 'configuración sobre código'. Spring, por ejemplo, escanea estas anotaciones para saber qué inyectar dónde."
+    },
+    {
+      "id": 20,
+      "difficulty": 5,
+      "question": "¿Qué es la reflexión (Reflection) en Java y cuándo se usa?",
+      "answers": [
+        "La capacidad de inspeccionar y modificar clases, métodos y campos en tiempo de ejecución; usada en frameworks, DI y serialización.",
+        "Una técnica para mejorar el rendimiento con JIT, permitiendo al código Java reescribirse a sí mismo durante la ejecución del programa.",
+        "Un mecanismo para invocar métodos de forma asíncrona entre diferentes hilos para mejorar la capacidad de respuesta de aplicaciones GUI.",
+        "La capacidad de un objeto de copiarse a sí mismo de forma profunda, manteniendo todas las referencias a otros objetos en un clon idéntico."
+      ],
+      "correct": 0,
+      "explanation": "Con java.lang.reflect, puedes obtener métodos de una clase, invocarlos dinámicamente y acceder a campos privados incluso sin conocer la clase de antemano. Spring lo usa para instanciar beans."
+    }
+  ],
+  "rewards": [
+    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
+    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
+    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
+    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
+    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
+  ]
+}
