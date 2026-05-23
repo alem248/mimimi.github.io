@@ -2,203 +2,263 @@
   "questions": [
     {
       "id": 1,
-      "difficulty": 1,
-      "question": "¿Cuál es el tipo de dato para texto en Python?",
-      "answers": ["str", "text", "char", "string"],
+      "difficulty": 5,
+      "question": "¿Cuál es el comportamiento interno si llamas múltiples veces a la función: def agregar(item, lista=[]): lista.append(item); return lista?",
+      "answers": [
+        "La lista por defecto se instancia una única vez durante la definición de la función; todas las llamadas mutan esa misma lista en memoria.",
+        "Python detecta la vulnerabilidad de mutación en tiempo de análisis de árbol sintáctico y fuerza una asignación nueva en memoria del heap por cada invocación para preservar obligatoriamente la pureza algorítmica de la función.",
+        "El ámbito local (local scope) elimina irreversiblemente la referencia a los parámetros por defecto al momento de ejecutar el return, por lo que el colector de basura recrea la estructura matricial en la siguiente llamada.",
+        "Se genera una fuga de memoria silenciosa (memory leak), ya que el compilador Just-In-Time bloquea la referencia en la caché del núcleo del procesador, exigiendo una limpieza manual rigurosa mediante el módulo nativo gc.collect()."
+      ],
       "correct": 0,
-      "explanation": "En Python el tipo para cadenas de texto es 'str'. Se puede crear con comillas simples, dobles o triples."
+      "explanation": "Los valores por defecto se evalúan solo una vez en Python al definirse la función, almacenándose en el atributo __defaults__. Si usas un mutable, los cambios se acumulan. La forma correcta es usar lista=None."
     },
     {
       "id": 2,
-      "difficulty": 1,
-      "question": "¿Cómo se define una función en Python?",
-      "answers": ["def mi_funcion():", "function mi_funcion():", "fun mi_funcion():", "define mi_funcion():"],
+      "difficulty": 5,
+      "question": "En la resolución del MRO (C3 Linearization) para class D(B, C), si B y C heredan de A, ¿qué asegura la linealización estricta?",
+      "answers": [
+        "Asegura la monotonía local: las subclases D, B y C se procesarán en orden estricto antes de siquiera buscar en su ancestro común A.",
+        "Garantiza un recorrido de búsqueda en profundidad (DFS) absoluto, priorizando analizar toda la rama izquierda de la herencia hasta el objeto base antes de inspeccionar cualquier propiedad heredada del nodo derecho C.",
+        "Establece que el orden dependa del número de atributos de clase; el motor cuenta estáticamente la carga de métodos mágicos en tiempo de compilación y posiciona primera en la jerarquía resolutiva a la clase más robusta estructuralmente.",
+        "Interrumpe la instanciación con un TypeError fatal asíncrono si un método de la interfaz A entra en colisión de firmas con un método en C, previniendo definitivamente el destructivo problema topológico del rombo de la muerte."
+      ],
       "correct": 0,
-      "explanation": "Las funciones en Python se definen con la palabra clave 'def', seguida del nombre y paréntesis. El cuerpo va indentado."
+      "explanation": "El algoritmo C3 resuelve el problema del diamante asegurando que las subclases siempre se evalúan antes que sus superclases, respetando la declaración de izquierda a derecha. Orden exacto: D -> B -> C -> A."
     },
     {
       "id": 3,
-      "difficulty": 1,
-      "question": "¿Qué estructura de datos usa llaves {} y pares clave-valor en Python?",
-      "answers": ["dict", "list", "tuple", "set"],
+      "difficulty": 5,
+      "question": "En el modelo Reference Counting, ¿qué ocurre si dos objetos aislados se referencian cíclicamente y pierden su conexión con el scope global?",
+      "answers": [
+        "Su conteo de referencias nunca llega a cero; dependen estrictamente de que el Garbage Collector generacional los detecte como ciclo inalcanzable para destruirlos.",
+        "El Global Interpreter Lock (GIL) intercepta la condición de carrera durante la ejecución asíncrona y lanza una excepción RuntimeError inminente para evitar el estrangulamiento irreversible de la memoria operativa del sistema host.",
+        "La destrucción de ambos objetos es instantánea debido a que el compilador de CPython aplica un decremento forzado y proactivo de punteros al identificar la salida definitiva del entorno léxico en la tabla de símbolos del módulo.",
+        "Ambos objetos se vuelven entidades inmutables y persisten indefinidamente en el segmento protegido de datos de la aplicación, pues la arquitectura base de Python carece estructuralmente de herramientas integradas para solventar dependencias cíclicas cruzadas."
+      ],
       "correct": 0,
-      "explanation": "El diccionario (dict) usa {clave: valor}. Las listas usan [], las tuplas () y los sets también {} pero sin pares clave-valor."
+      "explanation": "Reference Counting falla con referencias circulares porque ambos objetos se mantienen vivos el uno al otro (contador en 1). Python complementa esto con un recolector generacional que busca ciclos asilados en el heap."
     },
     {
       "id": 4,
-      "difficulty": 1,
-      "question": "¿Qué devuelve len([1, 2, 3, 4]) en Python?",
-      "answers": ["4", "3", "5", "None"],
+      "difficulty": 5,
+      "question": "¿Por qué a = 256; b = 256; a is b evalúa a True, pero a = 257; b = 257; a is b evalúa a False en CPython?",
+      "answers": [
+        "Por el 'Small Integer Caching', un mecanismo interno que pre-aloca un array fijo para los enteros entre -5 y 256.",
+        "Debido a la implementación profunda del protocolo de descriptores en la metaclase object, el cual redirige severamente la evaluación del operador 'is' a referencias abstractas de memoria si el valor decimal excede exactamente el umbral crítico de un byte.",
+        "Como resultado perjudicial de la coerción implícita gestionada por el módulo interno AST, el cual reinterpreta y almacena los números mayores a 256 como secuencias de bytes truncadas en matrices unidimensionales para prevenir desbordamientos.",
+        "A causa de un defecto histórico persistente en la paralelización de instrucciones, donde las asignaciones dinámicas mayores a 8 bits generan punteros de memoria ineludiblemente fragmentados dentro del mismo bloque lógico de procesamiento multihilo."
+      ],
       "correct": 0,
-      "explanation": "len() retorna el número de elementos. La lista tiene 4 elementos: 1, 2, 3 y 4."
+      "explanation": "CPython optimiza la ejecución precargando un array con los números -5 a 256 por ser de uso altísimo. Todas las variables asignadas a esos números apuntan al mismo espacio en memoria. Cifras mayores generan nuevos objetos distintos."
     },
     {
       "id": 5,
-      "difficulty": 1,
-      "question": "¿Cuál es la forma correcta de un comentario en Python?",
-      "answers": ["# comentario", "// comentario", "<!-- comentario -->", "** comentario"],
+      "difficulty": 5,
+      "question": "¿Qué mecanismo entra en acción oculta cuando utilizas el decorador @property sobre un método de clase?",
+      "answers": [
+        "Instancia el Protocolo de Descriptores, delegando el acceso a ese atributo a los métodos mágicos internos __get__ o __set__ de una clase Property.",
+        "Sobrescribe destructivamente el diccionario subyacente __dict__ de la instancia, anulando los permisos de escritura nativos y obligando al motor a canalizar todo acceso mediante un proxy configurado asíncronamente a nivel del módulo raíz.",
+        "Convierte de manera automática a la entidad contenedora en una metaclase maestra para gobernar su instanciación, garantizando que el recolector de basura categorice la función referenciada como un atributo estático e inmutable en el clúster.",
+        "Produce sintéticamente un closure restrictivo que encapsula rígidamente el contexto léxico global del objeto de clase, frustrando de raíz cualquier intento de herencia múltiple sobre dicho método y forzando imperativamente su ejecución secuencial."
+      ],
       "correct": 0,
-      "explanation": "En Python los comentarios de una línea comienzan con #. Para varias líneas se usan triple comillas como docstrings."
+      "explanation": "El decorador @property aplica el Descriptor Protocol. Al acceder al método como si fuera un atributo, el entorno no devuelve el método en sí, sino que invoca internamente a __get__(), lo que ejecuta y devuelve el resultado limpiamente."
     },
     {
       "id": 6,
-      "difficulty": 1,
-      "question": "¿Qué keyword se usa para manejar excepciones en Python?",
-      "answers": ["try / except", "try / catch", "begin / rescue", "attempt / handle"],
+      "difficulty": 4,
+      "question": "¿Cuál es la principal ventaja arquitectónica de utilizar una comprensión de generadores (generator expression) con paréntesis () sobre una comprensión de listas con corchetes []?",
+      "answers": [
+        "El generador es lazy (perezoso) y evalúa elemento por elemento ahorrando grandes cantidades de memoria RAM, mientras que la lista carga todo en memoria de golpe.",
+        "La expresión generadora emplea nativamente rutinas de concurrencia inyectadas por el módulo asyncio, resolviendo cada ciclo iterativo en hilos separados del sistema operativo, a diferencia de la lista que bloquea inexorablemente el flujo síncrono.",
+        "El uso de paréntesis fuerza al analizador del lenguaje a almacenar los resultados resultantes en un clúster temporal protegido contra escrituras inintencionadas, otorgando una inmutabilidad garantizada ausente en el comportamiento errático de las listas.",
+        "Permite acoplarse con la sintaxis de tuplas multidimensionales para conformar matrices densas requeridas por las bibliotecas de aprendizaje automático, mientras que la sintaxis de corchetes queda relegada históricamente al análisis de datos unidimensionales."
+      ],
       "correct": 0,
-      "explanation": "Python usa 'try' para el bloque que puede lanzar error y 'except' para capturarlo. Opcionalmente 'finally' siempre se ejecuta."
+      "explanation": "La comprensión de lista `[x for x in data]` genera la estructura completa antes de avanzar, consumiendo mucha RAM. El generador `(x for x in data)` solo crea el estado lógico y escupe los valores de a uno con `next()`, siendo ultra eficiente."
     },
     {
       "id": 7,
-      "difficulty": 2,
-      "question": "¿Qué es una list comprehension en Python?",
-      "answers": ["Una sintaxis compacta para crear listas: [expr for item in iterable if condición]", "Un método de la clase list para comprimir datos", "Una forma de heredar de la clase list", "Un decorador para funciones que retornan listas"],
+      "difficulty": 4,
+      "question": "¿Qué representa y para qué sirve el método especial `__slots__` dentro de la definición de una clase?",
+      "answers": [
+        "Reemplaza la creación dinámica del diccionario interno `__dict__` por un arreglo en memoria de tamaño estático, reduciendo drásticamente el consumo de memoria en aplicaciones con millones de instancias.",
+        "Establece una barrera perimetral en la arquitectura de herencia, ordenando explícitamente a las subclases reescribir un subconjunto restringido de atributos privados para garantizar la cohesión del diseño modular propuesto por el desarrollador.",
+        "Habilita el despliegue automático del patrón arquitectónico Observer a nivel de instancia, conectando los atributos declarados directamente a canales de sockets websockets para facilitar la reactividad extrema en frameworks frontend modernos.",
+        "Es un marcador inyectado por las herramientas de tipeo estático (como Mypy) para congelar transitoriamente las rutinas de inferencia de datos, previniendo colisiones de nomenclatura durante la etapa de ofuscación de código en entornos CI/CD."
+      ],
       "correct": 0,
-      "explanation": "[x**2 for x in range(10) if x % 2 == 0] crea una lista de cuadrados de números pares. Es más Pythónico y eficiente que un bucle equivalente."
+      "explanation": "Las instancias regulares guardan atributos en un `__dict__` dinámico que devora RAM. Declarar `__slots__ = ['x', 'y']` desactiva esto, preasignando exactamente el espacio para esas variables."
     },
     {
       "id": 8,
-      "difficulty": 2,
-      "question": "¿Qué diferencia hay entre una lista y una tupla en Python?",
-      "answers": ["Las listas son mutables; las tuplas son inmutables", "Las tuplas permiten más tipos de datos", "Las listas solo permiten números", "No hay diferencia práctica entre ambas"],
+      "difficulty": 5,
+      "question": "¿Qué es y cómo afecta el Global Interpreter Lock (GIL) al procesamiento multihilo (Threading) en aplicaciones Python ligadas a la CPU?",
+      "answers": [
+        "Es un mutex que asegura que solo un hilo del sistema operativo ejecute código bytecode de Python a la vez, impidiendo que programas intensivos en CPU se beneficien realmente del multi-core.",
+        "Constituye un subsistema heurístico integrado en el módulo concurrente cuyo propósito central es bloquear transacciones dañadas a nivel de memoria RAM para mitigar escenarios donde múltiples hilos intenten modificar simultáneamente la pila de llamadas C externa.",
+        "Representa una capa de hipervisor abstracta que detiene asíncronamente el hilo principal del programa en ejecución cada vez que se detecta una operación matemática flotante, obligando a re-enrutar el cálculo hacia las unidades lógicas aritméticas auxiliares de la GPU.",
+        "Es un candado de seguridad criptográfico que invalida de raíz la importación de bibliotecas compiladas en lenguajes C o C++ que no se encuentren previamente firmadas digitalmente por la fundación del lenguaje en el registro del núcleo local."
+      ],
       "correct": 0,
-      "explanation": "list puede modificarse (append, remove, etc.). tuple no puede modificarse una vez creada, lo que la hace más eficiente en memoria y hashable."
+      "explanation": "El GIL es el diseño defensivo de CPython para evitar condiciones de carrera a nivel de intérprete. Hace que el threading sea inútil para acelerar tareas matemáticas/CPU pesadas. Para paralelismo real, Python obliga a usar el módulo `multiprocessing`."
     },
     {
       "id": 9,
-      "difficulty": 2,
-      "question": "¿Qué hace el operador * al desempaquetar en Python?",
-      "answers": ["Captura múltiples elementos sobrantes en una asignación: a, *b, c = [1,2,3,4,5]", "Repite el objeto n veces", "Importa todos los elementos de un módulo", "Multiplica listas elemento a elemento"],
+      "difficulty": 4,
+      "question": "En el contexto del módulo asyncio, ¿por qué es crítico anteponer la palabra reservada 'await' al realizar llamadas I/O dentro de una 'async def'?",
+      "answers": [
+        "Porque 'await' pausa temporalmente la ejecución de esa corrutina específica cediendo el control del Event Loop para que pueda procesar otras corrutinas pendientes mientras los datos de I/O llegan.",
+        "Porque invoca un compilador de lenguaje intermedio subyacente que transfiere automáticamente toda la carga operativa desde el procesador central del servidor hacia micro-servicios periféricos distribuidos en clústeres elásticos en la nube de forma transparente.",
+        "Debido a que impone un bloqueo estricto a nivel del sistema operativo nativo (OS Lock), forzando ineludiblemente a que todas las transferencias de sockets de red abiertas adopten un comportamiento síncrono serializado para mitigar severas pérdidas de paquetes.",
+        "Porque actúa como un decorador dinámico abstracto que envuelve la estructura de control de retorno del método de origen, alterando destructivamente su firma de memoria hasta transformarlo en un objeto generador iterativo infinito imposible de interrumpir."
+      ],
       "correct": 0,
-      "explanation": "a, *b, c = [1,2,3,4,5] → a=1, b=[2,3,4], c=5. El * captura todos los elementos que no tiene variable asignada explícitamente."
+      "explanation": "Esa es la magia del asincronismo en un solo hilo. `await tarea_lenta()` le dice al bucle principal: 'Me quedo esperando esto, vete a atender otras cosas y vuelve aquí cuando esto haya terminado'."
     },
     {
       "id": 10,
-      "difficulty": 2,
-      "question": "¿Qué es un decorador en Python?",
-      "answers": ["Una función que envuelve a otra para modificar su comportamiento sin cambiar su código", "Una clase especial para crear objetos decorativos", "Un comentario estructurado para documentación", "Una función que retorna múltiples valores"],
+      "difficulty": 5,
+      "question": "¿Cuál es la diferencia técnica subyacente profunda entre el operador `is` y el operador `==` al comparar objetos complejos?",
+      "answers": [
+        "El operador `is` compara estrictamente la identidad del puntero en la memoria física (dirección hex), mientras que `==` delega en el método dunder `__eq__` para evaluar igualdad lógica de contenido.",
+        "El operador `==` fuerza implícitamente una comprobación de identidad asilada que descarta el contenido léxico, en total contraste con `is` que escanea recursivamente el árbol B del diccionario interno comparando valores absolutos byte a byte en tiempo de compilación.",
+        "No existe disparidad funcional a nivel del intérprete base; la separación semántica es una directriz sintáctica de diseño legada de lenguajes precursores como Perl, conservada únicamente para mantener operativa la ingeniería inversa de los módulos estándar antiguos.",
+        "El operador `is` evalúa exitosamente referencias en arquitecturas locales cerradas, pero colapsa produciendo excepciones lógicas al contrastar entidades que han sido previamente serializadas mediante Pickle y transitadas por protocolos inseguros de red TCP/IP."
+      ],
       "correct": 0,
-      "explanation": "@mi_decorador sobre una función es equivalente a func = mi_decorador(func). Se usa para logging, caché, autenticación, etc."
+      "explanation": "Si dos listas contienen ``, su comprobación con `==` será `True` (tienen los mismos valores). Sin embargo, `is` será `False` porque son dos listas alojadas en direcciones de memoria diferentes."
     },
     {
       "id": 11,
-      "difficulty": 2,
-      "question": "¿Qué hace el método .items() en un diccionario Python?",
-      "answers": ["Retorna una vista de todos los pares (clave, valor) del diccionario", "Retorna solo los valores del diccionario", "Ordena el diccionario por sus claves", "Retorna el número de pares clave-valor"],
+      "difficulty": 4,
+      "question": "¿Qué patrón de programación clásico se oculta estructuralmente tras el uso del Context Manager y su cláusula `with open(...) as f:`?",
+      "answers": [
+        "Implementa la limpieza segura garantizada, ejecutando automáticamente el método `__exit__` (que cierra el archivo) sin importar si el bloque interior arroja o no una excepción en tiempo real.",
+        "Construye un Singleton a nivel de manejador de archivos que bloquea silenciosamente cualquier acceso de lectura secundaria, obligando a los procesos de bajo nivel del subsistema kernel a hacer cola jerárquicamente hasta que el flujo original se desconecte.",
+        "Aplica una virtualización temporal del sistema de archivos, copiando íntegramente el documento original a una región protegida de la memoria SWAP antes de autorizar la escritura directa para evadir la fragmentación asincrónica en unidades de disco sólido.",
+        "Despliega internamente un entorno restringido de ejecución paralela asilado (sandbox) que anula irreversiblemente los permisos transaccionales de escritura de la variable referenciada para garantizar el principio inalienable de inmutabilidad de datos en entornos críticos."
+      ],
       "correct": 0,
-      "explanation": "for clave, valor in mi_dict.items(): permite iterar sobre todos los pares clave-valor del diccionario."
+      "explanation": "El Context Manager está diseñado para la asignación y liberación de recursos de forma impecable. Un bloque `with` asegura que si el programa falla a la mitad de leer un fichero o consultar la BD, las conexiones se van a limpiar correctamente."
     },
     {
       "id": 12,
-      "difficulty": 2,
-      "question": "¿Qué es el operador walrus (:=) en Python 3.8+?",
-      "answers": ["Asigna y retorna un valor dentro de una expresión en la misma línea", "Es un alias del operador de comparación", "Crea una copia profunda del objeto", "Define una lambda de dos parámetros"],
+      "difficulty": 5,
+      "question": "¿Por qué asignar variables de mutación global dentro de una función arroja 'UnboundLocalError' si antes no declaras explícitamente la palabra clave `global`?",
+      "answers": [
+        "Porque el simple acto de asignar un valor (`x = 5`) dentro de una función hace que el analizador estático marque automáticamente a la variable `x` como local, ocultando (shadowing) cualquier variable global homónima.",
+        "Debido a que el intérprete impone un estricto principio de aislamiento de alcance que purga radicalmente cualquier referencia cruzada procedente del nivel principal al compilar el bytecode, destruyendo las cadenas referenciales externas para prevenir fugas de seguridad.",
+        "Porque los tipos de datos primitivos son copiados por defecto de manera superficial en la pila del sistema operativo al momento de ejecutar la llamada a la subrutina, rompiendo los puentes de memoria necesarios para realizar la operación de retorno hacia el nivel superior.",
+        "A causa de un bloqueo originado en el protocolo del Garbage Collector, el cual se anticipa marcando restrictivamente las variables importadas de la raíz léxica como constantes de lectura para impedir que corrompan el diseño orientado a datos inmutables de la plataforma."
+      ],
       "correct": 0,
-      "explanation": "while chunk := file.read(8192): permite asignar y evaluar en la misma expresión, evitando llamadas duplicadas."
+      "explanation": "En Python, leer una variable global dentro de una función funciona perfectamente. Pero si intentas reasignarla (incluso `x += 1`), Python asume desde la fase de compilación que `x` es una variable local. Si la lees antes de asignarla (como ocurre en +=), falla porque la local aún no existe."
     },
     {
       "id": 13,
-      "difficulty": 3,
-      "question": "¿Qué es un generador (generator) en Python?",
-      "answers": ["Una función que usa 'yield' para producir valores de uno en uno sin cargar todo en memoria", "Una clase que genera instancias automáticamente", "Un tipo especial de lista que crece dinámicamente", "Un decorador para funciones que retornan múltiples valores"],
+      "difficulty": 4,
+      "question": "¿Qué problema resuelve la aplicación directa de functools.lru_cache() sobre una función matemática recursiva (como la sucesión de Fibonacci)?",
+      "answers": [
+        "Memoización: Almacena en un diccionario interno los resultados de ejecuciones pasadas basadas en los argumentos de entrada, eludiendo volver a calcular recursiones ya resueltas.",
+        "Inicia una optimización destructiva de la cola recursiva a nivel de ensamblador nativo, transmutando el algoritmo matemático de una complejidad lineal inestable a un bucle iterativo puro para impedir asíncronamente el desbordamiento destructivo de la pila (Stack Overflow).",
+        "Configura un proxy de delegación temporal que captura imperativamente todas las solicitudes de la función afectada para redirigirlas agresivamente hacia contenedores asilados en el backend usando protocolos de memoria compartida tipo Memcached o Redis de forma transparente al usuario.",
+        "Inyecta subrutinas silenciosas en el tiempo de compilación del AST para interceptar las validaciones aritméticas flotantes intrincadas, reduciendo la penalidad temporal de cada iteración a través de la supresión paramétrica de decimales de alta precisión requeridos por las arquitecturas robustas."
+      ],
       "correct": 0,
-      "explanation": "def mi_gen(): yield 1; yield 2. Los generadores son lazy: calculan el siguiente valor solo cuando se les pide con next(), ahorrando memoria."
+      "explanation": "El decorador @lru_cache (Least Recently Used Cache) es magia pura. Almacena silenciosamente el 'input X produce el output Y'. Si vuelves a llamar a la función con 'X', devuelve 'Y' instantáneamente sin ejecutar ni una línea de código interior."
     },
     {
       "id": 14,
       "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre deepcopy y copy en Python?",
-      "answers": ["copy() copia el objeto pero comparte referencias anidadas; deepcopy() copia recursivamente todos los objetos anidados", "deepcopy es más lento pero menos seguro", "copy() solo funciona con listas", "Son equivalentes para objetos simples"],
+      "question": "¿Cuál es la sintaxis correcta del operador condicional de expansión Walrus (:=) introducido desde Python 3.8 y qué posibilita hacer?",
+      "answers": [
+        "Permite asignar el valor a una variable y evaluar dicha expresión en línea simultáneamente: `if (n := len(datos)) > 10:`",
+        "Ejerce como un operador de fusión y concatenación de datos bidireccional asíncrono, posibilitando fusionar diccionarios dispares en la memoria caché alterando directamente el grafo subyacente sin desencadenar colisiones sintácticas fatales en la estructura principal del árbol C3.",
+        "Sustituye dogmáticamente al clásico operador ternario incorporando una validación semántica interna profunda capaz de reevaluar variables booleanas obsoletas directamente sobre el bloque lógico sin necesidad de convocar llamadas al subsistema recursivo del núcleo de la máquina virtual.",
+        "Facilita la declaración hermética de tipos de datos estáticos en el ámbito de la función global (type hinting) garantizando una compresión máxima a nivel de binarios portables, pero careciendo completamente de funcionalidad operativa real dentro del bucle interpretativo primario."
+      ],
       "correct": 0,
-      "explanation": "copy.copy(obj) es una copia superficial: los objetos anidados siguen siendo los mismos. copy.deepcopy(obj) crea copias independientes de todo."
+      "explanation": "El operador Walrus (morsa) ahorra líneas de código y cálculos repetitivos, permitiendo capturar el valor de una función y someterlo a un condicional `if/while` en una sola línea elegante en lugar de tener que separarlo en dos pasos lógicos."
     },
     {
       "id": 15,
-      "difficulty": 3,
-      "question": "¿Qué son los métodos dunder (magic methods) en Python?",
-      "answers": ["Métodos especiales con doble guión bajo (__init__, __str__, __len__) que definen comportamientos del lenguaje", "Métodos privados que no pueden heredarse", "Funciones del módulo builtins de Python", "Métodos que solo pueden llamarse desde la consola"],
+      "difficulty": 5,
+      "question": "En programación orientada a objetos, ¿para qué circunstancias arquitectónicas específicas resulta mandatorio sobreescribir el método mágico dunder `__new__` en lugar del clásico `__init__`?",
+      "answers": [
+        "Para interceptar y controlar por completo la fase lógica de asignación y creación física en memoria de la propia instancia, siendo imperativo en Patrones Singleton o al heredar y alterar tipos de datos pre-definidos inmutables (como int, str o tuple).",
+        "Para lograr desvincular temporalmente a la instancia recién forjada del escáner de monitoreo implacable administrado por el subsistema GC (Garbage Collector), retrasando sutilmente el ciclo de vida ontológico del objeto de datos en escenarios limitados de altísima densidad volumétrica.",
+        "Es un requerimiento insoslayable si se pretende compilar jerarquías modulares que operen con polimorfismo dinámico transaccional, dado que su inclusión en la cabecera reconfigura intrínsecamente la resolución algorítmica de enlaces (bindings) tardíos a nivel del bytecode nativo puro.",
+        "Para habilitar el inyector de dependencias automatizado provisto por la metaclase nativa, instruyendo perentoriamente al compilador a delegar la instanciación terminal de los constructores huérfanos directamente a interfaces periféricas conectadas mediante protocolos abstractos de reflexión C++."
+      ],
       "correct": 0,
-      "explanation": "__init__ es el constructor, __str__ define la representación en string, __len__ permite usar len(), __add__ define el operador +."
+      "explanation": "`__init__` no crea el objeto, solo le asigna atributos a un `self` ya pre-construido por el sistema. `__new__` es quien realmente le pide a la metaclase originar ese espacio en RAM y lo retorna. Debes hackear `__new__` si quieres que el objeto que nazca sea el mismo de antes (Singleton) o tenga un valor modificado imposible de cambiar post-creación."
     },
     {
       "id": 16,
-      "difficulty": 3,
-      "question": "¿Qué hace functools.lru_cache en Python?",
-      "answers": ["Memoriza los resultados de una función para evitar recalcularlos con los mismos argumentos", "Limita el número de llamadas a una función por segundo", "Crea una copia en caché de un módulo importado", "Ordena el resultado de la función en caché LRU"],
+      "difficulty": 4,
+      "question": "¿Cuál es la enorme diferencia arquitectónica en la utilización de la memoria RAM al aplicar `copy.deepcopy()` en lugar de una simple asignación `lista_b = lista_a[:]` en arreglos anidados (como matrices)?",
+      "answers": [
+        "El slicing `[:]` realiza una copia superficial, copiando punteros de los objetos internos, por lo que mutar listas profundas afectará al original. Deepcopy clona de forma recursiva construyendo estructuras y referencias de memoria física totalmente independientes y asiladas.",
+        "La instrucción de partición de arreglos `[:]` genera invariablemente excepciones catastróficas por violaciones de acceso concurrente a la memoria del sector, mientras que el módulo nativo profundo incorpora validaciones implícitas de candados criptográficos asegurando las lecturas exclusivas.",
+        "El método de copia profunda fragmenta la estructura interna original forzando drásticamente su traslación hacia la memoria de intercambio virtual compartida (SWAP), incrementando la lentitud del sistema asíncrono para beneficiar falsamente el espacio volumétrico del mapa principal.",
+        "Ambas directivas resultan lógicamente homólogas bajo el escrutinio interno del compilador dinámico JIT; la discrepancia subyace estrictamente en la sintaxis heredada utilizada en las especificaciones arcaicas para sostener compatibilidad con scripts desarrollados durante la era binaria Python 2.x."
+      ],
       "correct": 0,
-      "explanation": "@lru_cache(maxsize=128) almacena hasta 128 resultados distintos. Ideal para funciones recursivas costosas como Fibonacci."
+      "explanation": "Hacer un slice (`[:]`) crea una lista nueva, pero si dentro había otra lista, ambas listas apuntarán a la *misma* sublista interna. Modificar esa sublista interior arruinará ambas versiones. `copy.deepcopy` penetra infinitamente para clonar todo sin dejar rastros vinculados."
     },
     {
       "id": 17,
-      "difficulty": 3,
-      "question": "¿Qué es el GIL (Global Interpreter Lock) en CPython?",
-      "answers": ["Un mutex que impide que múltiples hilos ejecuten bytecode Python simultáneamente, limitando el paralelismo real en CPU-bound tasks", "Un sistema de seguridad para imports de módulos externos", "Un garbage collector que bloquea la ejecución durante la recolección", "Una licencia global de Python"],
+      "difficulty": 5,
+      "question": "¿De qué modo gestiona la API abstracta de Data Classes (`@dataclass`) las comparaciones cruzadas directas de la forma `instancia_1 == instancia_2` por defecto?",
+      "answers": [
+        "El decorador inyecta automáticamente de forma dinámica un método `__eq__` precompilado que efectúa una validación rigurosa campo a campo en estricto orden de declaración, sin necesidad de codificación repetitiva.",
+        "El componente intercepta las comparaciones derivándolas intrincadamente hacia el motor lógico primitivo, el cual aplica de forma indiscriminada colisiones criptográficas (hashes) MD5 sobre las propiedades anidadas para deducir estadísticamente un porcentaje relacional de equivalencia base.",
+        "El sistema desvía de oficio el operador de igualdad binario recanalizándolo en una comprobación absoluta de punteros a nivel del sustrato de memoria C interna (equivalente estricto del operador 'is'), desechando con antelación el valor contextual almacenado en las variables.",
+        "Bloquea agresivamente el proceso asíncrono instanciando la metaclase object originaria y emitiendo inmediatamente una excepción sintáctica ValueError, puesto que este arquetipo exige ineludiblemente heredar esquemas abstractos explícitos para tolerar resoluciones de similitud."
+      ],
       "correct": 0,
-      "explanation": "El GIL hace que threading no aproveche múltiples núcleos para tareas CPU-bound. Para paralelismo real en Python se usa multiprocessing o async IO."
+      "explanation": "Data Classes vinieron a eliminar el código repetitivo (boilerplate). Si creas un objeto normal `Persona('A', 30)` e instancias otro `Persona('A', 30)`, al compararlos con `==` darán Falso. Dataclass sobreescribe `__eq__` y `__repr__` para que se comporten como datos lógicos."
     },
     {
       "id": 18,
       "difficulty": 4,
-      "question": "¿Qué es asyncio en Python?",
-      "answers": ["Una librería para escribir código concurrente usando async/await, ideal para tareas I/O-bound sin hilos reales", "Un módulo para ejecutar código en múltiples procesos", "Una interfaz para llamadas al sistema operativo de forma asíncrona", "Un framework web basado en eventos"],
+      "question": "¿Qué utilidad funcional oculta despliega la instrucción mágica `yield from` dentro del cuerpo imperativo de un generador de Python?",
+      "answers": [
+        "Establece una delegación jerárquica sub-generadora; agota y despacha completamente la salida de un iterable o generador anidado interior sin la necesidad de escribir y procesar bucles transaccionales intermedios en la función padre.",
+        "Funciona imperativamente como un terminador de ciclo de recolección, comandando al entorno runtime central para que aplaste la memoria temporal del generador, abortando prematuramente todas las sentencias suspensivas que se encontraran bloqueando el hilo de la máquina virtual nativa.",
+        "Construye al vuelo un puente cifrado (tunneling) de comunicación transversal paralela asíncrona conectando iteradores de módulos en clústeres periféricos remotos, eludiendo la latencia en las escrituras en disco pero vulnerando el patrón global estándar de sincronía lineal algorítmica.",
+        "Altera el flujo dinámico descendente obligando a que las subsecuentes sentencias iterables sean interpretadas a la inversa asimétricamente, proveyendo al programador una interfaz simplificada para desensamblar vectores temporales y listas densas utilizando una única línea de programación legible."
+      ],
       "correct": 0,
-      "explanation": "asyncio usa un event loop con coroutines (async def / await) para manejar miles de conexiones I/O concurrentes con un solo hilo, sin el overhead de threads."
+      "explanation": "En vez de hacer `for x in otro_generador(): yield x`, simplemente dices `yield from otro_generador()`. Es elegante y delega la ejecución al subgenerador de forma directa y transparente."
     },
     {
       "id": 19,
-      "difficulty": 4,
-      "question": "¿Qué es un context manager y cómo se implementa?",
-      "answers": ["Un objeto que implementa __enter__ y __exit__ para gestionar recursos automáticamente con la sentencia 'with'", "Un gestor de contextos de ejecución para múltiples procesos", "Una clase que maneja las variables de entorno del sistema", "Un decorador para funciones que retornan contextos"],
+      "difficulty": 3,
+      "question": "¿Para qué tipo específico de operaciones fundamentales está reservado el empleo del tipo contenedor `set()` en lugar de utilizar arreglos o tuplas tradicionales?",
+      "answers": [
+        "Para remover duplicados absolutos de iterables de forma ultra rápida y ejecutar intercepciones de álgebra de conjuntos matemática avanzada (uniones, diferencias, intersecciones) con complejidad O(1).",
+        "Para estructurar catálogos informáticos ordenados crónicamente inmutables donde las colecciones de atributos indexados se mantengan estrictamente predecibles, favoreciendo en gran magnitud las iteraciones lineales profundas de componentes anidados dentro de bases de datos relacionales locales.",
+        "Para inyectar propiedades multidimensionales serializables nativamente en objetos requeridos por protocolos de red distribuidos, supliendo las limitaciones intrínsecas sintácticas de la clase Diccionario y asegurando el transporte asíncrono inquebrantable a nivel binario de puertos de transferencia.",
+        "Para proveer almacenamiento secuencial estructurado optimizado algorítmicamente mediante árboles B-Tree complejos, cuyo propósito basal y primordial es eludir el costo insostenible de acceder individualmente a particiones de discos duros mecánicos en aplicaciones científicas de alta demanda."
+      ],
       "correct": 0,
-      "explanation": "with open('file') as f: usa el context manager del archivo que abre en __enter__ y cierra en __exit__, garantizando limpieza aunque ocurra una excepción."
+      "explanation": "Los conjuntos (sets) están basados en Tablas Hash. Sus usos principales son dos: deshacerse rápido de los elementos repetidos de una lista `list(set(mi_lista))` y comprobar pertenencias o choques lógicos de manera casi instantánea usando el operador lógico de inclusión."
     },
     {
       "id": 20,
       "difficulty": 4,
-      "question": "¿Qué son los dataclasses en Python 3.7+?",
-      "answers": ["Clases que auto-generan __init__, __repr__ y __eq__ basándose en las anotaciones de tipo de los campos", "Clases especiales para conectarse a bases de datos", "Clases que solo pueden contener tipos de datos primitivos", "Una forma de definir clases sin métodos"],
+      "question": "¿Qué peculiaridad exhibe internamente el funcionamiento del método incorporado estático `enumerate()` frente a la aproximación antigua usando la función `range(len())` en una iteración condicional?",
+      "answers": [
+        "Produce un generador diferido, el cual emite eficientemente tuplas compuestas de la forma `(indice, valor)` en tiempo real, evitando indexaciones adicionales costosas y aumentando drásticamente la elegancia visual del bucle de código principal.",
+        "Anula inmediatamente todo el ecosistema asincrónico desencadenando una carga simultánea y destructiva a nivel de subsistema de memoria NVMe, pues transfiere lógicamente la jerarquía completa del array primario al espacio RAM protegido, paralizando transitoriamente el procesador central del host.",
+        "Desensambla coercitivamente las variables matriciales acopladas del array sometido y las recompone sobre la marcha bajo el diseño restrictivo de un diccionario plano (Flat Dictionary) asilado, inhabilitando irrevocablemente el posterior uso transversal del algoritmo original en rutinas secuenciales encadenadas.",
+        "Incorpora de oficio verificaciones semánticas algorítmicas de comprobación redundante lineal para impedir que identificadores repetidos en el arreglo resulten corrompidos durante su pasaje por el motor compilador nativo, a expensas de inflar astronómicamente los tiempos medidos de latencia del analizador sintáctico general."
+      ],
       "correct": 0,
-      "explanation": "@dataclass sobre una clase genera automáticamente __init__(self, x, y, z), __repr__ y __eq__, eliminando boilerplate repetitivo."
-    },
-    {
-      "id": 21,
-      "difficulty": 4,
-      "question": "¿Cuál es la diferencia entre __new__ y __init__ en Python?",
-      "answers": ["__new__ crea el objeto (aloca memoria); __init__ lo inicializa con atributos", "Son el mismo método con nombres distintos", "__new__ solo existe en metaclases", "__init__ se llama antes que __new__"],
-      "correct": 0,
-      "explanation": "__new__ es un método estático que retorna la nueva instancia. __init__ la recibe como self y la configura. Se usa __new__ para Singleton o tipos inmutables como str."
-    },
-    {
-      "id": 22,
-      "difficulty": 4,
-      "question": "¿Qué es un metaclass en Python?",
-      "answers": ["Una clase cuyas instancias son clases; permite controlar la creación y comportamiento de clases", "Una clase abstracta que no puede instanciarse", "Una clase que hereda de múltiples clases", "Un patrón de diseño de Python"],
-      "correct": 0,
-      "explanation": "type es la metaclase por defecto. Al definir class Meta(type):, puedes interceptar la creación de clases, validar atributos o registrar subclases automáticamente."
-    },
-    {
-      "id": 23,
-      "difficulty": 5,
-      "question": "¿Qué es el descriptor protocol en Python?",
-      "answers": ["Un protocolo donde un objeto implementa __get__, __set__ o __delete__ para controlar el acceso a atributos de otra clase", "Un protocolo de serialización para objetos Python", "Una forma de describir la interfaz de un módulo", "Un mecanismo para documentar clases automáticamente"],
-      "correct": 0,
-      "explanation": "property, classmethod y staticmethod son descriptores. Al implementar __get__/__set__/__delete__, un objeto controla cómo se accede a él cuando es atributo de clase."
-    },
-    {
-      "id": 24,
-      "difficulty": 5,
-      "question": "¿Cómo funciona el MRO (Method Resolution Order) con herencia múltiple en Python?",
-      "answers": ["Python usa el algoritmo C3 Linearization para determinar el orden en que se buscan métodos en la jerarquía de herencia múltiple", "Python sigue el orden de declaración de izquierda a derecha siempre", "MRO solo aplica a métodos dunder", "Python no soporta herencia múltiple real"],
-      "correct": 0,
-      "explanation": "class C(A, B): aplica C3: C→A→B→object. Puedes verlo con C.__mro__. Garantiza que cada clase aparezca solo una vez y se respeten los órdenes locales."
-    },
-    {
-      "id": 25,
-      "difficulty": 5,
-      "question": "¿Qué es el __slots__ en Python y cuándo se usa?",
-      "answers": ["Una declaración que reemplaza el __dict__ por instancia por un almacenamiento fijo, reduciendo uso de memoria significativamente", "Un mecanismo para definir métodos de solo lectura", "Una lista de métodos permitidos en una clase", "Una forma de definir atributos de clase compartidos"],
-      "correct": 0,
-      "explanation": "class Punto: __slots__ = ['x', 'y'] ahorra ~40% de memoria por instancia al evitar el __dict__ dinámico. Ideal para clases con millones de instancias."
+      "explanation": "Escribir `for i in range(len(lista)): print(lista[i])` es un anti-patrón conocido como 'programación en C dentro de Python'. `enumerate()` es Pythónico, rápido y expone ambos valores, índice y objeto, resolviendo el bucle de manera limpia y natural (`for i, val in enumerate(lista):`)."
     }
   ],
   "rewards": [
