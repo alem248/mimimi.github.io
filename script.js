@@ -36,7 +36,7 @@ let gameState = {
 };
 
 let timerInterval = null;
-let timeLeft = 15;
+let timeLeft = 35;
 
 // REFERENCIAS DOM
 const selectionScreen = document.getElementById('selectionScreen');
