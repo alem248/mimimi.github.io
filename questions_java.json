@@ -2,210 +2,48 @@
   "questions": [
     {
       "id": 1,
-      "difficulty": 1,
-      "question": "¿Cuál es el tipo de dato entero de 64 bits en Java?",
-      "answers": ["long", "int", "short", "double"],
+      "difficulty": 5,
+      "question": "¿Qué implica exactamente la inmutabilidad de la clase String en Java a nivel de seguridad y gestión de memoria?",
+      "answers": [
+        "Permite el String Interning (Pool), donde múltiples referencias apuntan a la misma instancia en memoria, previniendo riesgos de manipulación externa.",
+        "Obliga a la JVM a aplicar un bloqueo exclusivo (Synchronized) sobre el objeto cada vez que se invoca un método de concatenación, degradando el rendimiento en entornos concurrentes.",
+        "Impide que el recolector de basura elimine las cadenas, provocando una fuga de memoria controlada que persiste durante toda la vida útil de la Máquina Virtual.",
+        "Transforma la variable String en una constante de tiempo de compilación (hardcoded) almacenada en los registros de la CPU, eliminando por completo cualquier acceso a la RAM."
+      ],
       "correct": 0,
-      "explanation": "'long' almacena enteros de 64 bits (hasta ~9.2 × 10^18). 'int' es de 32 bits, 'short' de 16 bits y 'double' es decimal."
+      "explanation": "El String Pool ahorra memoria al reutilizar instancias literales. Si String fuera mutable, cambiar una cadena afectaría a todos los lugares donde esa cadena se usa, rompiendo la seguridad."
     },
     {
       "id": 2,
-      "difficulty": 1,
-      "question": "¿Qué palabra clave se usa para evitar que una clase sea heredada en Java?",
-      "answers": ["final", "static", "abstract", "sealed"],
+      "difficulty": 5,
+      "question": "¿Cuál es la diferencia técnica fundamental entre un 'Checked Exception' y un 'Unchecked Exception' (RuntimeException)?",
+      "answers": [
+        "Las Checked Exceptions deben ser declaradas en el 'throws' o capturadas en un 'try-catch' obligatoriamente para cumplir con el contrato de la API; las Unchecked no.",
+        "Las Checked son procesadas directamente por el núcleo de la JVM mediante interrupciones de hardware, mientras que las Unchecked son errores de software que se manejan en el stack de usuario.",
+        "Las Unchecked Exceptions tienen prioridad de resolución en el Thread Scheduler, garantizando que el programa no se detenga, mientras que las Checked causan un bloqueo inmediato del proceso.",
+        "No existe diferencia operativa; el compilador de Java (javac) permite que ambos tipos sean ignorados, siendo la distinción solo una convención estética para organizar el código fuente."
+      ],
       "correct": 0,
-      "explanation": "'final' aplicado a una clase impide que otras clases la extiendan. También sirve para métodos (sin override) y variables (sin reasignación)."
+      "explanation": "Las Checked Exceptions son problemas que el programador *debe* prever (ej. IOException). Las Unchecked son errores de lógica o programación (ej. NullPointerException) que la JVM considera evitables mediante mejores prácticas."
     },
     {
       "id": 3,
-      "difficulty": 1,
-      "question": "¿Qué método es el punto de entrada de cualquier programa Java?",
-      "answers": ["public static void main(String[] args)", "public void start()", "static void run()", "void init()"],
+      "difficulty": 5,
+      "question": "¿Por qué el uso de 'volatile' no es suficiente para garantizar la atomicidad en operaciones como `i++`?",
+      "answers": [
+        "Porque `i++` consta de tres operaciones: leer, incrementar y escribir; 'volatile' solo garantiza visibilidad de memoria, no atomicidad de la operación compuesta.",
+        "Porque 'volatile' bloquea el hilo de ejecución actual para prevenir la entrada de otros threads, convirtiendo inadvertidamente la operación en un proceso síncrono extremadamente lento.",
+        "Debido a que 'volatile' solo es efectivo para tipos de datos de referencia (objetos) y no tiene impacto alguno en tipos primitivos como el entero int.",
+        "Porque el compilador JIT ignora la palabra 'volatile' dentro de los métodos de una clase que implementa la interfaz Serializable, forzando la pérdida de sincronización."
+      ],
       "correct": 0,
-      "explanation": "La JVM busca exactamente 'public static void main(String[] args)' para iniciar la ejecución de un programa Java."
+      "explanation": "`volatile` garantiza que un hilo vea el valor más actualizado desde la memoria principal. Pero `i++` no es atómico: entre la lectura y la escritura, otro hilo pudo haber cambiado el valor."
     },
     {
       "id": 4,
-      "difficulty": 1,
-      "question": "¿Qué palabra clave se usa para crear un objeto en Java?",
-      "answers": ["new", "create", "instance", "make"],
-      "correct": 0,
-      "explanation": "'new' asigna memoria para el objeto y llama al constructor. Ejemplo: MyClass obj = new MyClass();"
-    },
-    {
-      "id": 5,
-      "difficulty": 1,
-      "question": "¿Qué es la herencia en Java?",
-      "answers": ["Un mecanismo para que una clase adquiera propiedades de otra usando 'extends'", "Copiar el código de una clase a otra manualmente", "Importar métodos estáticos de otra clase", "Instanciar múltiples objetos del mismo tipo"],
-      "correct": 0,
-      "explanation": "Con 'extends' una subclase hereda campos y métodos de la superclase, promoviendo reutilización de código."
-    },
-    {
-      "id": 6,
-      "difficulty": 1,
-      "question": "¿Cuál es la diferencia entre '==' y '.equals()' en Java al comparar Strings?",
-      "answers": ["== compara referencias; .equals() compara el contenido", "Son equivalentes para Strings", "== compara contenido; .equals() compara referencias", ".equals() solo funciona con números"],
-      "correct": 0,
-      "explanation": "== verifica si dos referencias apuntan al mismo objeto en memoria. .equals() compara el valor del contenido del String."
-    },
-    {
-      "id": 7,
-      "difficulty": 2,
-      "question": "¿Qué es una interfaz en Java?",
-      "answers": ["Un contrato que define métodos que las clases implementadoras deben proveer", "Una clase que no puede instanciarse directamente", "Un tipo de herencia múltiple de campos", "Un bloque de código que se ejecuta automáticamente"],
-      "correct": 0,
-      "explanation": "Una interface define firmas de métodos (y desde Java 8, métodos default). Las clases que la implementan con 'implements' deben proveer la lógica."
-    },
-    {
-      "id": 8,
-      "difficulty": 2,
-      "question": "¿Qué es el polimorfismo en Java?",
-      "answers": ["La capacidad de tratar objetos de distintas clases a través de una referencia común (superclase o interfaz)", "Tener múltiples constructores en una clase", "Ejecutar métodos en paralelo", "Definir métodos privados en interfaces"],
-      "correct": 0,
-      "explanation": "El polimorfismo permite que una referencia de tipo Animal pueda apuntar a un Perro o un Gato, y el método correcto se invoca en tiempo de ejecución."
-    },
-    {
-      "id": 9,
-      "difficulty": 2,
-      "question": "¿Qué diferencia hay entre ArrayList y LinkedList en Java?",
-      "answers": ["ArrayList usa array dinámico (acceso O(1)); LinkedList usa nodos enlazados (inserción/eliminación O(1))", "LinkedList es más rápido en todos los casos", "ArrayList no permite duplicados", "LinkedList es thread-safe por defecto"],
-      "correct": 0,
-      "explanation": "ArrayList es mejor para acceso aleatorio. LinkedList es mejor para inserciones/eliminaciones frecuentes al inicio o al medio de la lista."
-    },
-    {
-      "id": 10,
-      "difficulty": 2,
-      "question": "¿Qué es el autoboxing en Java?",
-      "answers": ["La conversión automática entre tipos primitivos y sus wrappers (int ↔ Integer)", "Empaquetar clases en archivos JAR automáticamente", "La instanciación automática de clases abstractas", "Convertir un String a número automáticamente"],
-      "correct": 0,
-      "explanation": "El autoboxing convierte automáticamente int a Integer al asignarlo a una colección, y unboxing hace lo inverso."
-    },
-    {
-      "id": 11,
-      "difficulty": 2,
-      "question": "¿Qué hace la palabra clave 'static' en un método Java?",
-      "answers": ["El método pertenece a la clase, no a instancias, y se puede llamar sin crear un objeto", "El método no puede ser sobreescrito", "El método es privado para el paquete", "El método se ejecuta al iniciar la JVM"],
-      "correct": 0,
-      "explanation": "Un método static se asocia a la clase, no a objetos. Se invoca como Clase.metodo() sin necesidad de instanciar."
-    },
-    {
-      "id": 12,
-      "difficulty": 2,
-      "question": "¿Qué es una clase abstracta en Java?",
-      "answers": ["Una clase que puede tener métodos sin implementar y no puede instanciarse directamente", "Una clase sin campos", "Una clase que solo tiene métodos estáticos", "Una clase que implementa todas las interfaces disponibles"],
-      "correct": 0,
-      "explanation": "Las clases abstractas con 'abstract' pueden tener métodos abstractos (sin cuerpo) y métodos concretos. Solo pueden usarse mediante subclases."
-    },
-    {
-      "id": 13,
-      "difficulty": 3,
-      "question": "¿Qué es el garbage collector en Java?",
-      "answers": ["Un proceso automático de la JVM que libera memoria de objetos no referenciados", "Una herramienta para eliminar archivos .class", "Un mecanismo para detectar memory leaks manualmente", "Un recolector de excepciones no capturadas"],
-      "correct": 0,
-      "explanation": "El GC de la JVM monitorea qué objetos ya no tienen referencias vivas y los elimina automáticamente, evitando memory leaks manuales."
-    },
-    {
-      "id": 14,
-      "difficulty": 3,
-      "question": "¿Cuál es la diferencia entre checked y unchecked exceptions en Java?",
-      "answers": ["Las checked deben declararse o capturarse en tiempo de compilación; las unchecked (RuntimeException) no", "Las unchecked son más graves que las checked", "Las checked solo ocurren en métodos main", "No hay diferencia práctica entre ambas"],
-      "correct": 0,
-      "explanation": "Checked: IOException, SQLException – el compilador obliga a manejarlas. Unchecked: NullPointerException, ArrayIndexOutOfBoundsException – son opcionales de capturar."
-    },
-    {
-      "id": 15,
-      "difficulty": 3,
-      "question": "¿Qué es el Stream API introducido en Java 8?",
-      "answers": ["Una API para procesar colecciones de forma declarativa y funcional con operaciones como filter, map y reduce", "Una API para leer archivos de texto línea por línea", "Una librería para conexiones de red en tiempo real", "Una forma de crear hilos de ejecución paralelos"],
-      "correct": 0,
-      "explanation": "Stream API permite encadenar operaciones funcionales sobre colecciones: list.stream().filter(x -> x > 0).map(String::valueOf).collect(...)."
-    },
-    {
-      "id": 16,
-      "difficulty": 3,
-      "question": "¿Qué es la sobrecarga de métodos (method overloading)?",
-      "answers": ["Definir múltiples métodos con el mismo nombre pero distintos parámetros en la misma clase", "Reemplazar un método heredado con una nueva implementación", "Ejecutar el mismo método en múltiples hilos", "Llamar a un método desde otro método de la misma clase"],
-      "correct": 0,
-      "explanation": "El overloading permite que una clase tenga: void print(int x), void print(String s), void print(double d) – mismo nombre, distintas firmas."
-    },
-    {
-      "id": 17,
-      "difficulty": 3,
-      "question": "¿Qué hace la anotación @Override en Java?",
-      "answers": ["Indica al compilador que el método sobreescribe uno de la superclase, generando error si no es así", "Obliga al método a ejecutarse antes que el del padre", "Marca el método como obsoleto", "Permite llamar al método estáticamente"],
-      "correct": 0,
-      "explanation": "@Override es una anotación de validación: si el nombre o firma del método no coinciden con la superclase, el compilador lanza un error, evitando bugs silenciosos."
-    },
-    {
-      "id": 18,
-      "difficulty": 4,
-      "question": "¿Qué es un genérico (Generic) en Java?",
-      "answers": ["Un mecanismo para escribir clases y métodos que operan sobre tipos parametrizados, brindando type safety en tiempo de compilación", "Una clase que hereda de Object implícitamente", "Un tipo de colección sin tipo definido", "Una clase utilitaria de java.util"],
-      "correct": 0,
-      "explanation": "Con generics: List<String> garantiza que solo se añaden Strings. Sin generics habría que hacer castings manuales y los errores de tipo surgirían en runtime."
-    },
-    {
-      "id": 19,
-      "difficulty": 4,
-      "question": "¿Cuál es la diferencia entre HashMap y Hashtable en Java?",
-      "answers": ["HashMap no es thread-safe y permite null keys/values; Hashtable es sincronizado y no permite nulls", "Hashtable es más moderno que HashMap", "HashMap no permite iterar sus claves", "Son idénticos desde Java 8"],
-      "correct": 0,
-      "explanation": "HashMap es más rápido en contextos de un solo hilo. Hashtable está sincronizado (thread-safe) pero obsoleto; se prefiere ConcurrentHashMap en entornos multi-hilo."
-    },
-    {
-      "id": 20,
-      "difficulty": 4,
-      "question": "¿Qué es el patrón Builder en Java?",
-      "answers": ["Un patrón de diseño que construye objetos complejos paso a paso usando métodos encadenados", "Un patrón para construir interfaces gráficas", "Una forma de generar código Java automáticamente", "Un patrón para crear múltiples instancias de una clase"],
-      "correct": 0,
-      "explanation": "Builder separa la construcción de un objeto complejo de su representación: Person p = new Person.Builder().name('Ana').age(25).build();"
-    },
-    {
-      "id": 21,
-      "difficulty": 4,
-      "question": "¿Qué es la serialización en Java?",
-      "answers": ["El proceso de convertir un objeto en una secuencia de bytes para almacenarlo o transmitirlo", "Convertir código Java a bytecode", "Ejecutar métodos en orden secuencial", "Ordenar colecciones de objetos"],
-      "correct": 0,
-      "explanation": "Implementando Serializable, un objeto puede escribirse en un stream (fichero, red). La deserialización reconstruye el objeto original desde los bytes."
-    },
-    {
-      "id": 22,
-      "difficulty": 4,
-      "question": "¿Qué es el Optional en Java 8?",
-      "answers": ["Un contenedor que puede o no contener un valor no nulo, evitando NullPointerExceptions explícitas", "Una anotación para parámetros de métodos", "Una clase de colección ordenada", "Un tipo de dato primitivo nuevo"],
-      "correct": 0,
-      "explanation": "Optional<T> obliga a manejar explícitamente la ausencia de valor: optional.ifPresent(v -> ...) o optional.orElse(default), en lugar de chequeos null."
-    },
-    {
-      "id": 23,
       "difficulty": 5,
-      "question": "¿Qué es el happens-before en el modelo de memoria de Java (JMM)?",
-      "answers": ["Una relación de orden que garantiza que las acciones de un hilo sean visibles a otro en el orden correcto", "Un mecanismo para ejecutar código antes de que inicie la JVM", "Una forma de priorizar hilos en el scheduler", "Un tipo de lock más eficiente que synchronized"],
-      "correct": 0,
-      "explanation": "El JMM garantiza happens-before para: unlock→lock, escritura volatile→lectura volatile, Thread.start(), Thread.join(). Sin esta relación, los cambios pueden no ser visibles entre hilos."
-    },
-    {
-      "id": 24,
-      "difficulty": 5,
-      "question": "¿Cuál es la diferencia entre ReentrantLock y synchronized en Java?",
-      "answers": ["ReentrantLock permite tryLock(), timeout, lockInterruptibly e interruptibilidad; synchronized no", "synchronized es más moderno y recomendado", "ReentrantLock no puede usarse en métodos de instancia", "No hay diferencia de rendimiento"],
-      "correct": 0,
-      "explanation": "ReentrantLock ofrece control más fino: intentar adquirir el lock sin bloquearse, con timeout, o respondiendo a interrupciones. synchronized es más simple pero menos flexible."
-    },
-    {
-      "id": 25,
-      "difficulty": 5,
-      "question": "¿Qué es la reflexión (Reflection) en Java y cuándo se usa?",
-      "answers": ["La capacidad de inspeccionar y modificar clases, métodos y campos en tiempo de ejecución; usada en frameworks, DI y serialización", "Una técnica para mejorar el rendimiento con JIT", "Un mecanismo para invocar métodos de forma asíncrona", "La capacidad de un objeto de copiarse a sí mismo"],
-      "correct": 0,
-      "explanation": "Con java.lang.reflect, puedes: obtener métodos de una clase, invocarlos dinámicamente, acceder a campos privados. Spring, Hibernate y JUnit lo usan intensamente."
-    }
-  ],
-  "rewards": [
-    { "minScore": 0,  "maxScore": 19,  "title": "NOVATA",      "description": "Practica más",                  "message": "¡Sé que puedes lograrlo. No te rindas!" },
-    { "minScore": 20, "maxScore": 49,  "title": "EN PRÁCTICA", "description": "Vas bien, pero esfuérzate más", "message": "Se nota la práctica. Solo hay que pulirla." },
-    { "minScore": 50, "maxScore": 74,  "title": "INTERMEDIA",  "description": "¡Buen dominio del juego!",      "message": "Estás a mitad de camino. Sigue así y llegarás lejos." },
-    { "minScore": 75, "maxScore": 94,  "title": "AVANZADA",    "description": "Nivel sobresaliente",           "message": "¡Impresionante! Tu técnica está casi al máximo." },
-    { "minScore": 95, "maxScore": 100, "title": "EXPERTA",     "description": "¡Dominio total!",               "message": "¡Eres una leyenda! Has alcanzado la cima del éxito." }
-  ]
-}
+      "question": "¿Qué ocurre con el 'Classloader' si intentas cargar una clase que ya fue cargada por el 'Parent Classloader'?",
+      "answers": [
+        "El modelo de delegación prioriza al padre; el hijo nunca carga la clase, retornando siempre la instancia ya existente en el padre.",
+        "La JVM crea una nueva copia de la clase en memoria para asegurar el aislamiento, permitiendo tener dos versiones idénticas cargadas simultáneamente bajo diferentes nombres.",
+        "Se genera una excepción 'LinkageError: Duplicate Class Definition' que bloque
